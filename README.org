@@ -1,0 +1,16 @@
+#+TITLE: GCJ
+
+* Google Code Jam Haskell Framework
+
+Here I'll post some Google Code Jam solutions in Haskell (the language
+I love to learn).  Some past solutions can also be found it my other
+[[http://github.com/joranvar/GoogleCodeJam][Google Code Jam]] repository, but as of today I'm rewriting the
+framework and the solutions using theories I came across while using
+F# at work.  This work is mainly intended as practice for the oncoming
+Jam ([[https://code.google.com/codejam][2016-04-08]]), and to improve my use of the Haskell language.
+
+Feel free to use this code as a starting point for *your* entries, but
+remember, sharing the solution to any actual Google Code Jam problems
+is only allowed /after/ each round is completed, at risk of
+disqualification.  Also remember, this code is covered by the GPL,
+version 3 or (at your option) any later version.
