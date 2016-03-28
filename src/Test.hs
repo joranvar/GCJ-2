@@ -1,3 +1,8 @@
-import Test.HUnit (runTestTT, Test(..))
+import Test.HUnit (runTestTT, Test(..), (~:), (~?=))
 
-main = runTestTT $ TestList []
+import Solution (parse, examples)
+
+tests = TestList
+  [ "Can parse" ~: map (parse . fst) examples ~?= map snd examples ]
+
+main = runTestTT tests

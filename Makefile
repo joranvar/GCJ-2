@@ -17,9 +17,12 @@ Test = $(call HASKELL_mkTarget,Test)
 # Cabal dependencies
 HUnit = $(call HASKELL_mkCabalDep,HUnit)
 
+# Groups
+Solution = GCJ/Y2008/Q/A.hs
+
 # Dependencies
 $(Main): Main.hs
-$(Test): Test.hs $(HUnit)
+$(Test): Test.hs $(HUnit) $(Solution)
 
 .PHONY: test
 test: $(Test)
