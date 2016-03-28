@@ -1,4 +1,4 @@
-module Solution (parse, examples, input, problems) where
+module Solution (parse, examples, input, problems, output) where
 
 newtype SearchEngine = SearchEngine String deriving (Eq, Show)
 newtype Query        = Query String        deriving (Eq, Show)
