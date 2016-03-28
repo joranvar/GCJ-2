@@ -19,7 +19,7 @@ HUnit = $(call HASKELL_mkCabalDep,HUnit)
 
 # Dependencies
 $(Main): Main.hs
-$(Test): Test.hs
+$(Test): Test.hs $(HUnit)
 
 .PHONY: test
 test: $(Test)

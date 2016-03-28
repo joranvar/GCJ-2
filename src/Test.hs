@@ -1,2 +1,3 @@
-main :: IO ()
-main = undefined
+import Test.HUnit (runTestTT, Test(..))
+
+main = runTestTT $ TestList []
