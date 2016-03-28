@@ -10,7 +10,7 @@ include $(MAKE_utilsDir)/Haskell.mk
 
 vpath %.hs src
 
-# Program
+# Targets
 Main = $(call HASKELL_mkTarget,Main)
 
 # Cabal dependencies
