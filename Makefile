@@ -10,13 +10,23 @@ include $(MAKE_utilsDir)/Haskell.mk
 
 vpath %.hs src
 
-# Program
+# Targets
 Main = $(call HASKELL_mkTarget,Main)
+Test = $(call HASKELL_mkTarget,Test)
 
 # Cabal dependencies
+HUnit = $(call HASKELL_mkCabalDep,HUnit)
+
+# Groups
+Solution = GCJ/Y2008/Q/A.hs
 
 # Dependencies
 $(Main): Main.hs
+$(Test): Test.hs $(HUnit) $(Solution)
+
+.PHONY: test
+test: $(Test)
+	$(Test)
 
 .PHONY: all
 all: $(Main)
