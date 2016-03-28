@@ -16,37 +16,36 @@ parse input = Problem ss qs : parse rest
 
 examples :: [([String], [Problem])]
 examples =
-  [ (lines "5\n\
-           \Yeehaw\n\
-           \NSM\n\
-           \Dont Ask\n\
-           \B9\n\
-           \Googol\n\
-           \10\n\
-           \Yeehaw\n\
-           \Yeehaw\n\
-           \Googol\n\
-           \B9\n\
-           \Googol\n\
-           \NSM\n\
-           \B9\n\
-           \NSM\n\
-           \Dont Ask\n\
-           \Googol\n\
-           \5\n\
-           \Yeehaw\n\
-           \NSM\n\
-           \Dont Ask\n\
-           \B9\n\
-           \Googol\n\
-           \7\n\
-           \Googol\n\
-           \Dont Ask\n\
-           \NSM\n\
-           \NSM\n\
-           \Yeehaw\n\
-           \Yeehaw\n\
-           \Googol"
+  [ ( [ "5"
+      , "Yeehaw"
+      , "NSM"
+      , "Dont Ask"
+      , "B9"
+      , "Googol"
+      , "10"
+      , "Yeehaw"
+      , "Yeehaw"
+      , "Googol"
+      , "B9"
+      , "Googol"
+      , "NSM"
+      , "B9"
+      , "NSM"
+      , "Dont Ask"
+      , "Googol"
+      , "5"
+      , "Yeehaw"
+      , "NSM"
+      , "Dont Ask"
+      , "B9"
+      , "Googol"
+      , "7"
+      , "Googol"
+      , "Dont Ask"
+      , "NSM"
+      , "NSM"
+      , "Yeehaw"
+      , "Yeehaw"
+      , "Googol" ]
     , [ Problem ["Yeehaw","NSM","Dont Ask","B9","Googol"] ["Yeehaw","Yeehaw","Googol","B9","Googol","NSM","B9","NSM","Dont Ask","Googol"]
-      , Problem ["Yeehaw","NSM","Dont Ask","B9","Googol"] ["Googol","Dont Ask","NSM","NSM","Yeehaw","Yeehaw","Googol"]
-      ]) ]
+      , Problem ["Yeehaw","NSM","Dont Ask","B9","Googol"] ["Googol","Dont Ask","NSM","NSM","Yeehaw","Yeehaw","Googol"] ] ) ]
