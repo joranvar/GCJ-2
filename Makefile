@@ -12,11 +12,17 @@ vpath %.hs src
 
 # Targets
 Main = $(call HASKELL_mkTarget,Main)
+Test = $(call HASKELL_mkTarget,Test)
 
 # Cabal dependencies
 
 # Dependencies
 $(Main): Main.hs
+$(Test): Test.hs
+
+.PHONY: test
+test: $(Test)
+	$(Test)
 
 .PHONY: all
 all: $(Main)
