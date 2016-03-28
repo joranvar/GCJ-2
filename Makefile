@@ -15,6 +15,7 @@ Main = $(call HASKELL_mkTarget,Main)
 Test = $(call HASKELL_mkTarget,Test)
 
 # Cabal dependencies
+HUnit = $(call HASKELL_mkCabalDep,HUnit)
 
 # Dependencies
 $(Main): Main.hs
