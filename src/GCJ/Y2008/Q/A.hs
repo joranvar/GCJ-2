@@ -60,7 +60,8 @@ examples =
                        \Googol\n\
                        \"
   , output = "Case #1: 1\n\
-              \Case #2: 0"
+              \Case #2: 0\n\
+              \"
   , problems = [ ( Problem (map SearchEngine ["Yeehaw","NSM","Dont Ask","B9","Googol"])
                            (map Query ["Yeehaw","Yeehaw","Googol","B9","Googol","NSM","B9","NSM","Dont Ask","Googol"])
                  , Solution 1 )
