@@ -13,8 +13,8 @@ data Solution = Solution Int
 
 parse :: [String] -> [Problem]
 parse []    = []
-parse input = Problem (map SearchEngine ss) (map Query qs) : parse rest
-  where s:spart     = input
+parse inp = Problem (map SearchEngine ss) (map Query qs) : parse rest
+  where s:spart     = inp
         (ss, qpart) = splitAt (read s) spart
         q:qpart'    = qpart
         (qs, rest)  = splitAt (read q) qpart'
