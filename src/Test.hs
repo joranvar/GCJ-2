@@ -1,10 +1,10 @@
 import Test.HUnit (runTestTT, Test(..), (~:), (~?=))
 import Control.Monad (void)
 
-import Solution (parse, examples, input, problems, output, Solution, solve)
+import Solution (parse, examples, input, problems, output, Solution, display, solve)
 
 showSolution :: Int -> Solution -> String
-showSolution i s = "Case #" ++ show i ++ ":" ++ show s
+showSolution i s = "Case #" ++ show i ++ ":" ++ display s
 
 tests :: Test
 tests = TestList

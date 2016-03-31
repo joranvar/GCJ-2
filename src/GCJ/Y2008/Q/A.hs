@@ -1,4 +1,4 @@
-module Solution (parse, examples, input, problems, output, Solution, solve) where
+module Solution (parse, examples, input, problems, output, Solution, display, solve) where
 
 newtype SearchEngine = SearchEngine String deriving (Eq, Show)
 newtype Query        = Query String        deriving (Eq, Show)
@@ -7,10 +7,7 @@ data Problem = Problem [SearchEngine] [Query]
   deriving (Eq, Show)
 
 data Solution = Solution Int
-  deriving (Eq)
-
-instance Show Solution where
-  show (Solution i) = " " ++ show i
+  deriving (Eq, Show)
 
 parse :: [String] -> [Problem]
 parse []    = []
@@ -19,6 +16,9 @@ parse input = Problem (map SearchEngine ss) (map Query qs) : parse rest
         (ss, qpart) = splitAt (read s) spart
         q:qpart'    = qpart
         (qs, rest)  = splitAt (read q) qpart'
+
+display :: Solution -> String
+display (Solution i) = " " ++ show i
 
 solve :: Problem -> Solution
 solve (Problem _ _) = Solution 0
