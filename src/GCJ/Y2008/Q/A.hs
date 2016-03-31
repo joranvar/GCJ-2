@@ -7,7 +7,10 @@ data Problem = Problem [SearchEngine] [Query]
   deriving (Eq, Show)
 
 data Solution = Solution Int
-  deriving (Eq, Show)
+  deriving (Eq)
+
+instance Show Solution where
+  show (Solution i) = " " ++ show i
 
 parse :: [String] -> [Problem]
 parse []    = []
