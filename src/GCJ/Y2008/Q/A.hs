@@ -1,5 +1,7 @@
 module Solution (parse, examples, input, problems, output, Solution, display, solve) where
 
+import Data.List (delete)
+
 newtype SearchEngine = SearchEngine String deriving (Eq, Show)
 newtype Query        = Query String        deriving (Eq, Show)
 
@@ -21,7 +23,11 @@ display :: Solution -> String
 display (Solution i) = " " ++ show i
 
 solve :: Problem -> Solution
-solve (Problem _ _) = Solution 0
+solve (Problem _ []) = Solution 0
+solve (Problem ss qs) = Solution $ result 0 ss qs
+  where result acc _ [] = acc
+        result acc [] qs' = result (acc + 1) ss qs'
+        result acc ss' (Query q:qs') = result acc (delete (SearchEngine q) ss') qs'
 
 data Example = Example { input    :: String
                        , problems :: [(Problem, Solution)]
