@@ -7,3 +7,6 @@ class Problem p where
 class Solution s where
   display :: s -> String
   displayExamples :: [([s], String)]
+
+class Solver s where
+  solve :: s -> [String] -> [String]
