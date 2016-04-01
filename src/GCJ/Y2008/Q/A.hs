@@ -14,42 +14,11 @@ instance GCJ.Problem A where
           (ss, qpart) = splitAt (read s) spart
           q:qpart'    = qpart
           (qs, rest)  = splitAt (read q) qpart'
-  parseExamples = [("2\n\
-                     \5\n\
-                     \Yeehaw\n\
-                     \NSM\n\
-                     \Dont Ask\n\
-                     \B9\n\
-                     \Googol\n\
-                     \10\n\
-                     \Yeehaw\n\
-                     \Yeehaw\n\
-                     \Googol\n\
-                     \B9\n\
-                     \Googol\n\
-                     \NSM\n\
-                     \B9\n\
-                     \NSM\n\
-                     \Dont Ask\n\
-                     \Googol\n\
-                     \5\n\
-                     \Yeehaw\n\
-                     \NSM\n\
-                     \Dont Ask\n\
-                     \B9\n\
-                     \Googol\n\
-                     \7\n\
-                     \Googol\n\
-                     \Dont Ask\n\
-                     \NSM\n\
-                     \NSM\n\
-                     \Yeehaw\n\
-                     \Yeehaw\n\
-                     \Googol\n\
-                     \", [  A (map SearchEngine ["Yeehaw","NSM","Dont Ask","B9","Googol"])
-                              (map Query ["Yeehaw","Yeehaw","Googol","B9","Googol","NSM","B9","NSM","Dont Ask","Googol"])
-                         ,  A (map SearchEngine ["Yeehaw","NSM","Dont Ask","B9","Googol"])
-                              (map Query ["Googol","Dont Ask","NSM","NSM","Yeehaw","Yeehaw","Googol"])])]
+  parseExamples = [ ( "2\n5\nYeehaw\nNSM\nDont Ask\nB9\nGoogol\n10\nYeehaw\nYeehaw\nGoogol\nB9\nGoogol\nNSM\nB9\nNSM\nDont Ask\nGoogol\n5\nYeehaw\nNSM\nDont Ask\nB9\nGoogol\n7\nGoogol\nDont Ask\nNSM\nNSM\nYeehaw\nYeehaw\nGoogol\n"
+                    , [  A (map SearchEngine ["Yeehaw","NSM","Dont Ask","B9","Googol"])
+                           (map Query ["Yeehaw","Yeehaw","Googol","B9","Googol","NSM","B9","NSM","Dont Ask","Googol"])
+                      ,  A (map SearchEngine ["Yeehaw","NSM","Dont Ask","B9","Googol"])
+                           (map Query ["Googol","Dont Ask","NSM","NSM","Yeehaw","Yeehaw","Googol"])])]
 
 data Solution = Solution Int
   deriving (Eq, Show)
