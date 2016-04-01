@@ -24,6 +24,7 @@ data S = S Int
   deriving (Eq, Show)
 instance GCJ.Solution S where
   display (S i) = " " ++ show i
+  displayExamples = [([S 1, S 0], "Case #1: 1\nCase #2: 0\n")]
 
 solve :: P -> S
 solve (P _ []) = S 0

@@ -8,10 +8,11 @@ showSolution i s = "Case #" ++ show i ++ ":" ++ display s
 
 tests :: Test
 tests =
-  let parseExamples' = parseExamples :: [(String,[P])]
-  in TestList [ "Can parse" ~: map (parse . tail . lines . fst) parseExamples' ~?= map snd parseExamples'
-              , "Can show"  ~: map (unlines . zipWith showSolution [1..] . map snd . problems) examples ~?= map output examples
-              , "Can solve" ~: map (map (solve . fst) . problems) examples ~?= map (map snd . problems) examples ]
+  let parseExamples'   = parseExamples :: [(String,[P])]
+      displayExamples' = displayExamples :: [([S],String)]
+  in TestList [ "Can parse"   ~: map (parse . tail . lines . fst) parseExamples' ~?= map snd parseExamples'
+              , "Can display" ~: map (unlines . zipWith showSolution [1..] . fst) displayExamples' ~?= map snd displayExamples'
+              , "Can solve"   ~: map (map (solve . fst) . problems) examples ~?= map (map snd . problems) examples ]
 
 main :: IO ()
 main = void $ runTestTT tests
