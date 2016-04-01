@@ -9,7 +9,7 @@ tests r =
       displayExamples' = displayExamples :: [([S],String)]
   in TestList [ "Can parse"   ~: map (parse . tail . lines . fst) parseExamples' ~?= map snd parseExamples'
               , "Can display" ~: map (unlines . zipWith display [1..] . fst) displayExamples' ~?= map snd displayExamples'
-              , "Can solve"   ~: map ((solve r) . tail . lines . fst) parseExamples' ~?= map (lines . snd) displayExamples'
+              , "Can solve"   ~: map ((solve r) . fst) parseExamples' ~?= map snd displayExamples'
               ]
 
 main :: IO ()
