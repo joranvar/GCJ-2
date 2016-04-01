@@ -1,4 +1,4 @@
-module Solution (P(..), examples, input, problems, output, S(..), solve) where
+module Solution (P(..), examples, input, problems, output, S(..), solve') where
 import Data.List (delete)
 import GCJ (Problem(..), Solution(..))
 
@@ -26,9 +26,9 @@ instance GCJ.Solution S where
   display (S i) = " " ++ show i
   displayExamples = [([S 1, S 0], "Case #1: 1\nCase #2: 0\n")]
 
-solve :: P -> S
-solve (P _ []) = S 0
-solve (P ss qs) = S $ result 0 ss qs
+solve' :: P -> S
+solve' (P _ []) = S 0
+solve' (P ss qs) = S $ result 0 ss qs
   where result acc _ [] = acc
         result acc [] qs' = result (acc + 1) ss qs'
         result acc ss' (Query q:qs') = result acc (delete (SearchEngine q) ss') qs'
