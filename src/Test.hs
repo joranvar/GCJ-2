@@ -1,7 +1,7 @@
 import Test.HUnit (runTestTT, Test(..), (~:), (~?=))
 import Control.Monad (void)
-import Solution (P(..), S(..), solve', R(..))
-import GCJ (Problem(..), Solution(..), Solver(..))
+import Solution (P(..), S(..), solve')
+import GCJ (Problem(..), Solution(..), Solver(..), R(..))
 
 tests :: (Solver r) => r -> Test
 tests r =

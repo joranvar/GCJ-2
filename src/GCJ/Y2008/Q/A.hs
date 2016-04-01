@@ -1,6 +1,6 @@
-module Solution (P(..), S(..), solve', R(..)) where
+module Solution (P(..), S(..), solve') where
 import Data.List (delete)
-import GCJ (Problem(..), Solution(..), Solver(..))
+import GCJ (Problem(..), Solution(..))
 
 newtype SearchEngine = SearchEngine String deriving (Eq, Show)
 newtype Query        = Query String        deriving (Eq, Show)
@@ -25,10 +25,6 @@ data S = S Int
 instance GCJ.Solution S where
   display n (S i) = "Case #" ++ show n ++ ": " ++ show i
   displayExamples = [([S 1, S 0], "Case #1: 1\nCase #2: 0\n")]
-
-data R p s = R (p -> s)
-instance (Problem p, Solution s) => GCJ.Solver (R p s) where
-  solve (R r) =  zipWith display [1..] . map r . parse
 
 solve' :: P -> S
 solve' (P _ []) = S 0

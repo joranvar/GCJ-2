@@ -10,3 +10,7 @@ class Solution s where
 
 class Solver s where
   solve :: s -> [String] -> [String]
+
+data R p s = R (p -> s)
+instance (Problem p, Solution s) => GCJ.Solver (R p s) where
+  solve (R r) = zipWith display [1..] . map r . parse
