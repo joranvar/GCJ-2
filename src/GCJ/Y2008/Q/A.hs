@@ -1,4 +1,4 @@
-module Solution (P(..), examples, input, problems, output, S(..), solve') where
+module Solution (P(..), S(..), solve', R(..)) where
 import Data.List (delete)
 import GCJ (Problem(..), Solution(..), Solver(..))
 
@@ -36,20 +36,3 @@ solve' (P ss qs) = S $ result 0 ss qs
   where result acc _ [] = acc
         result acc [] qs' = result (acc + 1) ss qs'
         result acc ss' (Query q:qs') = result acc (delete (SearchEngine q) ss') qs'
-
-data Example = Example { input    :: String
-                       , problems :: [(P, S)]
-                       , output   :: String }
-
-examples :: [Example]
-examples =
-  [ Example { input = ""
-  , output = "Case #1: 1\n\
-              \Case #2: 0\n\
-              \"
-  , problems = [ ( P (map SearchEngine ["Yeehaw","NSM","Dont Ask","B9","Googol"])
-                     (map Query ["Yeehaw","Yeehaw","Googol","B9","Googol","NSM","B9","NSM","Dont Ask","Googol"])
-                 , S 1 )
-               , ( P (map SearchEngine ["Yeehaw","NSM","Dont Ask","B9","Googol"])
-                     (map Query ["Googol","Dont Ask","NSM","NSM","Yeehaw","Yeehaw","Googol"])
-                 , S 0 ) ] } ]
