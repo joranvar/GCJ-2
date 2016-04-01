@@ -18,7 +18,8 @@ Test = $(call HASKELL_mkTarget,Test)
 HUnit = $(call HASKELL_mkCabalDep,HUnit)
 
 # Groups
-Solution = GCJ/Y2008/Q/A.hs
+GCJ = GCJ.hs
+Solution = GCJ/Y2008/Q/A.hs $(GCJ)
 
 # Dependencies
 $(Main): Main.hs

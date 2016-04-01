@@ -1,7 +1,7 @@
 import Test.HUnit (runTestTT, Test(..), (~:), (~?=))
 import Control.Monad (void)
-
-import Solution (parse, examples, input, problems, output, Solution, display, solve)
+import Solution (examples, input, problems, output, Solution, display, solve)
+import GCJ (Problem(..))
 
 showSolution :: Int -> Solution -> String
 showSolution i s = "Case #" ++ show i ++ ":" ++ display s

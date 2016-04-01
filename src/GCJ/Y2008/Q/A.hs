@@ -1,36 +1,35 @@
-module Solution (parse, examples, input, problems, output, Solution, display, solve) where
-
+module Solution (examples, input, problems, output, Solution, display, solve) where
 import Data.List (delete)
+import GCJ (Problem(..))
 
 newtype SearchEngine = SearchEngine String deriving (Eq, Show)
 newtype Query        = Query String        deriving (Eq, Show)
 
-data Problem = Problem [SearchEngine] [Query]
+data A = A [SearchEngine] [Query]
   deriving (Eq, Show)
+instance GCJ.Problem A where
+  parse [] = []
+  parse inp = A (map SearchEngine ss) (map Query qs) : parse rest
+    where s:spart     = inp
+          (ss, qpart) = splitAt (read s) spart
+          q:qpart'    = qpart
+          (qs, rest)  = splitAt (read q) qpart'
 
 data Solution = Solution Int
   deriving (Eq, Show)
 
-parse :: [String] -> [Problem]
-parse []    = []
-parse inp = Problem (map SearchEngine ss) (map Query qs) : parse rest
-  where s:spart     = inp
-        (ss, qpart) = splitAt (read s) spart
-        q:qpart'    = qpart
-        (qs, rest)  = splitAt (read q) qpart'
-
 display :: Solution -> String
 display (Solution i) = " " ++ show i
 
-solve :: Problem -> Solution
-solve (Problem _ []) = Solution 0
-solve (Problem ss qs) = Solution $ result 0 ss qs
+solve :: A -> Solution
+solve (A _ []) = Solution 0
+solve (A ss qs) = Solution $ result 0 ss qs
   where result acc _ [] = acc
         result acc [] qs' = result (acc + 1) ss qs'
         result acc ss' (Query q:qs') = result acc (delete (SearchEngine q) ss') qs'
 
 data Example = Example { input    :: String
-                       , problems :: [(Problem, Solution)]
+                       , problems :: [(A, Solution)]
                        , output   :: String }
 
 examples :: [Example]
@@ -71,9 +70,9 @@ examples =
   , output = "Case #1: 1\n\
               \Case #2: 0\n\
               \"
-  , problems = [ ( Problem (map SearchEngine ["Yeehaw","NSM","Dont Ask","B9","Googol"])
-                           (map Query ["Yeehaw","Yeehaw","Googol","B9","Googol","NSM","B9","NSM","Dont Ask","Googol"])
+  , problems = [ ( A (map SearchEngine ["Yeehaw","NSM","Dont Ask","B9","Googol"])
+                     (map Query ["Yeehaw","Yeehaw","Googol","B9","Googol","NSM","B9","NSM","Dont Ask","Googol"])
                  , Solution 1 )
-               , ( Problem (map SearchEngine ["Yeehaw","NSM","Dont Ask","B9","Googol"])
-                           (map Query ["Googol","Dont Ask","NSM","NSM","Yeehaw","Yeehaw","Googol"])
+               , ( A (map SearchEngine ["Yeehaw","NSM","Dont Ask","B9","Googol"])
+                     (map Query ["Googol","Dont Ask","NSM","NSM","Yeehaw","Yeehaw","Googol"])
                  , Solution 0 ) ] } ]
