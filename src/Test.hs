@@ -1,16 +1,16 @@
 import Test.HUnit (runTestTT, Test(..), (~:), (~?=))
 import Control.Monad (void)
+import Solution (P(..), S(..), solve')
+import GCJ (Problem(..), Solution(..), Solver(..), R(..))
 
-import Solution (parse, examples, input, problems, output, Solution, display, solve)
-
-showSolution :: Int -> Solution -> String
-showSolution i s = "Case #" ++ show i ++ ":" ++ display s
-
-tests :: Test
-tests = TestList
-  [ "Can parse" ~: map (parse . tail . lines . input) examples ~?= map (map fst . problems) examples
-  , "Can show"  ~: map (unlines . zipWith showSolution [1..] . map snd . problems) examples ~?= map output examples
-  , "Can solve" ~: map (map (solve . fst) . problems) examples ~?= map (map snd . problems) examples ]
+tests :: (Solver r) => r -> Test
+tests r =
+  let parseExamples'   = parseExamples :: [(String,[P])]
+      displayExamples' = displayExamples :: [([S],String)]
+  in TestList [ "Can parse"   ~: map (parse . tail . lines . fst) parseExamples' ~?= map snd parseExamples'
+              , "Can display" ~: map (unlines . zipWith display [1..] . fst) displayExamples' ~?= map snd displayExamples'
+              , "Can solve"   ~: map ((solve r) . fst) parseExamples' ~?= map snd displayExamples'
+              ]
 
 main :: IO ()
-main = void $ runTestTT tests
+main = void $ runTestTT $ tests (R solve')
