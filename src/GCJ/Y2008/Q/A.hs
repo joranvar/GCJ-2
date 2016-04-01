@@ -1,6 +1,6 @@
-module Solution (P(..), examples, input, problems, output, S(..), display, solve) where
+module Solution (P(..), examples, input, problems, output, S(..), solve) where
 import Data.List (delete)
-import GCJ (Problem(..))
+import GCJ (Problem(..), Solution(..))
 
 newtype SearchEngine = SearchEngine String deriving (Eq, Show)
 newtype Query        = Query String        deriving (Eq, Show)
@@ -22,9 +22,8 @@ instance GCJ.Problem P where
 
 data S = S Int
   deriving (Eq, Show)
-
-display :: S -> String
-display (S i) = " " ++ show i
+instance GCJ.Solution S where
+  display (S i) = " " ++ show i
 
 solve :: P -> S
 solve (P _ []) = S 0
