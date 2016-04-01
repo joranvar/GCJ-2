@@ -5,7 +5,7 @@ class Problem p where
   parseExamples :: [(String, [p])]
 
 class Solution s where
-  display :: s -> String
+  display :: Int -> s -> String
   displayExamples :: [([s], String)]
 
 class Solver s where
