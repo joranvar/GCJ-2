@@ -1,8 +1,11 @@
 module GCJ where
 
+import Test.QuickCheck (Gen)
+
 class Problem p where
   parse :: [String] -> [p]
   parseExamples :: [(String, [p])]
+  generatorForSet :: Int -> Maybe (Gen p)
 
 class Solution s where
   display :: Int -> s -> String
