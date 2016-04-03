@@ -1,5 +1,5 @@
 import Test.HUnit (runTestTT, Test(..), (~:), (~?=))
-import Test.QuickCheck (quickCheck, within, forAll, Property, label)
+import Test.QuickCheck (quickCheck, within, forAll, Property, label, property)
 import Control.Monad (void)
 import qualified Data.Maybe as Maybe (fromJust, isJust)
 import Solution (P(..), S(..), solve')
@@ -18,7 +18,7 @@ checks :: R P S -> [Property]
 checks (R solve) = map (\testset ->
                            within (testRuntime testset `div` numCases testset)
                            $ label (name testset)
-                           $ forAll (generator testset) ((/=) "" . display (-1) . solve))
+                           $ forAll (generator testset) (\p -> (flip . foldr) label (classify p) . property . (/=) "" . display (-1) $ solve p))
                    $ setGenerators
 
 limits :: Int

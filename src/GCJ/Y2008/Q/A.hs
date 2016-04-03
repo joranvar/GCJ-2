@@ -41,6 +41,18 @@ instance GCJ.Problem P where
                             , testRuntime = 8 * 60 * 1000
                             , numCases = 20 } ]
 
+  classify (P ss qs) = filter ((/=) "") [q, s] where
+    s = case length ss of
+           100 -> "large maximal s"
+           10 -> "small maximal s"
+           2 -> "minimal s"
+           _ -> ""
+    q = case length qs of
+           1000 -> "large maximal q"
+           100 -> "small maximal q"
+           0 -> "minimal q"
+           _ -> ""
+
 data S = S Int
   deriving (Eq, Show)
 instance GCJ.Solution S where

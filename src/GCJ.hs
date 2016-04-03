@@ -8,6 +8,7 @@ class Problem p where
   parse :: [String] -> [p]
   parseExamples :: [(String, [p])]
   setGenerators :: [TestSet p]
+  classify :: p -> [String]
 
 class Solution s where
   display :: Int -> s -> String
