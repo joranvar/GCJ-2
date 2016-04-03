@@ -2,10 +2,12 @@ module GCJ where
 
 import Test.QuickCheck (Gen)
 
+data TestSet p = TestSet { name::String, generator::Gen p, testRuntime::Int, numCases::Int }
+
 class Problem p where
   parse :: [String] -> [p]
   parseExamples :: [(String, [p])]
-  generatorForSet :: Int -> Maybe (Gen p)
+  setGenerators :: [TestSet p]
 
 class Solution s where
   display :: Int -> s -> String

@@ -1,6 +1,6 @@
 module Solution (P(..), S(..), solve') where
 import Data.List (delete)
-import GCJ (Problem(..), Solution(..))
+import GCJ (Problem(..), Solution(..), TestSet(..))
 import qualified Test.QuickCheck as QS
 
 newtype SearchEngine = SearchEngine String deriving (Eq, Show)
@@ -22,19 +22,24 @@ instance GCJ.Problem P where
                       ,  P (map SearchEngine ["Yeehaw","NSM","Dont Ask","B9","Googol"])
                            (map Query ["Googol","Dont Ask","NSM","NSM","Yeehaw","Yeehaw","Googol"])])]
 
-  generatorForSet 1 = Just $ do
-    s <- QS.oneof [QS.choose (2, 10), QS.elements [2, 10]]
-    ss <- QS.vector s
-    q <- QS.oneof [QS.choose (0, 100), QS.elements [0, 100]]
-    qs <- QS.vector q
-    return $ P (map SearchEngine ss) (map Query qs)
-  generatorForSet 2 = Just $ do
-    s <- QS.oneof [QS.choose (2, 100), QS.elements [2, 100]]
-    ss <- QS.vector s
-    q <- QS.oneof [QS.choose (0, 1000), QS.elements [0, 1000]]
-    qs <- QS.vector q
-    return $ P (map SearchEngine ss) (map Query qs)
-  generatorForSet _ = Nothing
+  setGenerators = [ TestSet { name = "Small"
+                            , generator =  do
+                                s <- QS.oneof [QS.choose (2, 10), QS.elements [2, 10]]
+                                ss <- QS.vector s
+                                q <- QS.oneof [QS.choose (0, 100), QS.elements [0, 100]]
+                                qs <- QS.vector q
+                                return $ P (map SearchEngine ss) (map Query qs)
+                            , testRuntime = 4 * 60 * 1000
+                            , numCases = 20 }
+                  , TestSet { name = "Large"
+                            , generator = do
+                                s <- QS.oneof [QS.choose (2, 100), QS.elements [2, 100]]
+                                ss <- QS.vector s
+                                q <- QS.oneof [QS.choose (0, 1000), QS.elements [0, 1000]]
+                                qs <- QS.vector q
+                                return $ P (map SearchEngine ss) (map Query qs)
+                            , testRuntime = 8 * 60 * 1000
+                            , numCases = 20 } ]
 
 data S = S Int
   deriving (Eq, Show)
