@@ -1,7 +1,7 @@
 import Test.HUnit (runTestTT, Test(..), (~:), (~?=))
 import Test.QuickCheck (quickCheck, within, forAll, Property)
 import Control.Monad (void)
-import qualified Data.Maybe as Maybe (fromJust)
+import qualified Data.Maybe as Maybe (fromJust, isJust)
 import Solution (P(..), S(..), solve')
 import GCJ (Problem(..), Solution(..), Runner(..), R(..))
 
@@ -15,8 +15,7 @@ tests r =
               ]
 
 checks :: R P S -> [Property]
-checks (R solve) = [ (forAll (Maybe.fromJust $ generatorForSet 1) ((/=) "" . display (-1) . solve'))
-                   , (forAll (Maybe.fromJust $ generatorForSet 2) ((/=) "" . display (-1) . solve')) ]
+checks (R solve) = map (\gen -> forAll (Maybe.fromJust gen) ((/=) "" . display (-1) . solve')) . takeWhile Maybe.isJust $ map generatorForSet [1..]
 
 limits :: Int
 limits =  4 * 60 * 1000 `div` 20
