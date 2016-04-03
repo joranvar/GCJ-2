@@ -1,9 +1,9 @@
 import Test.HUnit (runTestTT, Test(..), (~:), (~?=))
 import Control.Monad (void)
 import Solution (P(..), S(..), solve')
-import GCJ (Problem(..), Solution(..), Solver(..), R(..))
+import GCJ (Problem(..), Solution(..), Runner(..), R(..))
 
-tests :: (Solver r) => r -> Test
+tests :: (Runner r) => r -> Test
 tests r =
   let parseExamples'   = parseExamples :: [(String,[P])]
       displayExamples' = displayExamples :: [([S],String)]
