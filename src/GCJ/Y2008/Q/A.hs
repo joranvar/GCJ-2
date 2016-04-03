@@ -23,16 +23,16 @@ instance GCJ.Problem P where
                            (map Query ["Googol","Dont Ask","NSM","NSM","Yeehaw","Yeehaw","Googol"])])]
 
   generatorForSet 1 = Just $ do
-    s <- QS.choose (2, 10)
-    ss <- QS.vectorOf s QS.arbitrary
-    q <- QS.choose (2, 100)
-    qs <- QS.vectorOf q QS.arbitrary
+    s <- QS.oneof [QS.choose (2, 10), QS.elements [2, 10]]
+    ss <- QS.vector s
+    q <- QS.oneof [QS.choose (0, 100), QS.elements [0, 100]]
+    qs <- QS.vector q
     return $ P (map SearchEngine ss) (map Query qs)
   generatorForSet 2 = Just $ do
-    s <- QS.choose (2, 100)
-    ss <- QS.vectorOf s QS.arbitrary
-    q <- QS.choose (2, 1000)
-    qs <- QS.vectorOf q QS.arbitrary
+    s <- QS.oneof [QS.choose (2, 100), QS.elements [2, 100]]
+    ss <- QS.vector s
+    q <- QS.oneof [QS.choose (0, 1000), QS.elements [0, 1000]]
+    qs <- QS.vector q
     return $ P (map SearchEngine ss) (map Query qs)
   generatorForSet _ = Nothing
 

@@ -15,7 +15,11 @@ tests r =
               ]
 
 checks :: R P S -> [Property]
-checks (R solve) = map (\gen -> forAll (Maybe.fromJust gen) ((/=) "" . display (-1) . solve')) . takeWhile Maybe.isJust $ map generatorForSet [1..]
+checks (R solve) = map (\gen ->
+                           within limits
+                           $ forAll (Maybe.fromJust gen) ((/=) "" . display (-1) . solve'))
+                   . takeWhile Maybe.isJust
+                   $ map generatorForSet [1..]
 
 limits :: Int
 limits =  4 * 60 * 1000 `div` 20
