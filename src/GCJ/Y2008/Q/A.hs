@@ -1,6 +1,7 @@
 module Solution (P(..), S(..), solve') where
 import Data.List (delete)
 import GCJ (Problem(..), Solution(..))
+import qualified Test.QuickCheck as QS
 
 newtype SearchEngine = SearchEngine String deriving (Eq, Show)
 newtype Query        = Query String        deriving (Eq, Show)
@@ -14,11 +15,26 @@ instance GCJ.Problem P where
           (ss, qpart) = splitAt (read s) spart
           q:qpart'    = qpart
           (qs, rest)  = splitAt (read q) qpart'
+
   parseExamples = [ ( "2\n5\nYeehaw\nNSM\nDont Ask\nB9\nGoogol\n10\nYeehaw\nYeehaw\nGoogol\nB9\nGoogol\nNSM\nB9\nNSM\nDont Ask\nGoogol\n5\nYeehaw\nNSM\nDont Ask\nB9\nGoogol\n7\nGoogol\nDont Ask\nNSM\nNSM\nYeehaw\nYeehaw\nGoogol\n"
                     , [  P (map SearchEngine ["Yeehaw","NSM","Dont Ask","B9","Googol"])
                            (map Query ["Yeehaw","Yeehaw","Googol","B9","Googol","NSM","B9","NSM","Dont Ask","Googol"])
                       ,  P (map SearchEngine ["Yeehaw","NSM","Dont Ask","B9","Googol"])
                            (map Query ["Googol","Dont Ask","NSM","NSM","Yeehaw","Yeehaw","Googol"])])]
+
+  generatorForSet 1 = Just $ do
+    s <- QS.choose (2, 10)
+    ss <- QS.vectorOf s QS.arbitrary
+    q <- QS.choose (2, 100)
+    qs <- QS.vectorOf q QS.arbitrary
+    return $ P (map SearchEngine ss) (map Query qs)
+  generatorForSet 2 = Just $ do
+    s <- QS.choose (2, 100)
+    ss <- QS.vectorOf s QS.arbitrary
+    q <- QS.choose (2, 1000)
+    qs <- QS.vectorOf q QS.arbitrary
+    return $ P (map SearchEngine ss) (map Query qs)
+  generatorForSet _ = Nothing
 
 data S = S Int
   deriving (Eq, Show)
