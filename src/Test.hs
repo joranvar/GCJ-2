@@ -1,5 +1,7 @@
 import Test.HUnit (runTestTT, Test(..), (~:), (~?=))
+import Test.QuickCheck (quickCheck, within, forAll)
 import Control.Monad (void)
+import qualified Data.Maybe as Maybe (fromJust)
 import Solution (P(..), S(..), solve')
 import GCJ (Problem(..), Solution(..), Runner(..), R(..))
 
@@ -12,5 +14,10 @@ tests r =
               , "Can solve"   ~: map ((solve r) . fst) parseExamples' ~?= map snd displayExamples'
               ]
 
+limits :: Int
+limits =  4 * 60 * 1000 `div` 20
+
 main :: IO ()
-main = void $ runTestTT $ tests (R solve')
+main = sequence_ [ void . runTestTT $ tests (R solve')
+                 , mapM_ (quickCheck . within limits) $ [(forAll (Maybe.fromJust $ generatorForSet 1) ((/=) "" . display 1 . solve'))]
+                 ]
