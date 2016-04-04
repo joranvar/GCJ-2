@@ -23,27 +23,21 @@ instance GCJ.Problem P where
                            (map Query ["Googol","Dont Ask","NSM","NSM","Yeehaw","Yeehaw","Googol"])])]
 
   setGenerators = [ TestSet { name = "Small"
-                            , generator =  do
-                                (ss, sLabel) <- GCJ.limits 2 10
-                                (qs, qLabel) <- GCJ.limits 0 100
-                                (overlappers, oLabel) <- GCJ.limitsOf 0 (length qs) $ ss
-                                qs' <- QS.shuffle $ take (length qs) (overlappers ++ qs)
-                                return $ (P (map SearchEngine ss) (map Query qs'), concat [ map ("s:" ++ ) sLabel
-                                                                                          , map ("q:" ++) qLabel
-                                                                                          , map ("overlap:" ++) oLabel ])
+                            , generator = generate (2, 10) (0, 100)
                             , testRuntime = 4 * 60 * 1000
                             , numCases = 20 }
                   , TestSet { name = "Large"
-                            , generator = do
-                                (ss, sLabel) <- GCJ.limits 2 100
-                                (qs, qLabel) <- GCJ.limits 0 1000
-                                (overlappers, oLabel) <- GCJ.limitsOf 0 (length qs) $ ss
-                                qs' <- QS.shuffle $ take (length qs) (overlappers ++ qs)
-                                return $ (P (map SearchEngine ss) (map Query qs'), concat [ map ("s:" ++ ) sLabel
-                                                                                          , map ("q:" ++) qLabel
-                                                                                          , map ("overlap:" ++) oLabel ])
+                            , generator = generate (2, 100) (0, 1000)
                             , testRuntime = 8 * 60 * 1000
                             , numCases = 20 } ]
+    where generate (minS, maxS) (minQ, maxQ) =  do
+            (ss, sLabel) <- GCJ.limits minS maxS
+            (qs, qLabel) <- GCJ.limits minQ maxQ
+            (overlappers, oLabel) <- GCJ.limitsOf 0 (length qs) ss
+            qs' <- QS.shuffle $ take (length qs) (overlappers ++ qs)
+            return (P (map SearchEngine ss) (map Query qs'), concat [ map ("s:" ++ ) sLabel
+                                                                    , map ("q:" ++) qLabel
+                                                                    , map ("overlap:" ++) oLabel ])
 
 data S = S Int
   deriving (Eq, Show)
