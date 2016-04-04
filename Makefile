@@ -16,6 +16,7 @@ Test = $(call HASKELL_mkTarget,Test)
 
 # Cabal dependencies
 HUnit = $(call HASKELL_mkCabalDep,HUnit)
+QuickCheck = $(call HASKELL_mkCabalDep,QuickCheck)
 
 # Groups
 GCJ = GCJ.hs
@@ -23,7 +24,7 @@ Solution = GCJ/Y2008/Q/A.hs $(GCJ)
 
 # Dependencies
 $(Main): Main.hs
-$(Test): Test.hs $(HUnit) $(Solution)
+$(Test): Test.hs $(HUnit) $(Solution) $(QuickCheck)
 
 .PHONY: test
 test: $(Test)
