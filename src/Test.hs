@@ -10,15 +10,15 @@ tests r =
       displayExamples' = displayExamples :: [([S],String)]
   in TestList [ "Can parse"   ~: map (parse . tail . lines . fst) parseExamples' ~?= map snd parseExamples'
               , "Can display" ~: map (unlines . zipWith display [1..] . fst) displayExamples' ~?= map snd displayExamples'
-              , "Can solve"   ~: map ((solve r) . fst) parseExamples' ~?= map snd displayExamples'
+              , "Can solve"   ~: map (solve r . fst) parseExamples' ~?= map snd displayExamples'
               ]
 
 checks :: R P S -> [Property]
-checks (R solve) = map (\testset ->
+checks (R solver) = map (\testset ->
                            within (testRuntime testset `div` numCases testset)
                            $ label (name testset)
-                           $ forAll (generator testset) (\(p, labels) -> (flip . foldr) label labels . property . (/=) "" . display (-1) $ solve p))
-                   $ setGenerators
+                           $ forAll (generator testset) (\(p, labels) -> (flip . foldr) label labels . property . (/=) "" . display (-1) $ solver p))
+                       setGenerators
 
 main :: IO ()
 main = sequence_ [ void . runTestTT $ tests (R solve')
