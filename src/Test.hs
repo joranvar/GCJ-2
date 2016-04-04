@@ -1,7 +1,6 @@
 import Test.HUnit (runTestTT, Test(..), (~:), (~?=))
 import Test.QuickCheck (quickCheck, within, forAll, Property, label, property)
 import Control.Monad (void)
-import qualified Data.Maybe as Maybe (fromJust, isJust)
 import Solution (P(..), S(..), solve')
 import GCJ (Problem(..), Solution(..), Runner(..), R(..), TestSet(..))
 
