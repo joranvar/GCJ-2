@@ -20,10 +20,7 @@ checks (R solve) = map (\testset ->
                            $ forAll (generator testset) (\(p, labels) -> (flip . foldr) label labels . property . (/=) "" . display (-1) $ solve p))
                    $ setGenerators
 
-limits :: Int
-limits =  4 * 60 * 1000 `div` 20
-
 main :: IO ()
 main = sequence_ [ void . runTestTT $ tests (R solve')
-                 , mapM_ (quickCheck . within limits) $ checks (R solve')
+                 , mapM_ quickCheck $ checks (R solve')
                  ]
