@@ -28,3 +28,11 @@ limits min' max' = do
   return ( xs, case n of _ | n == min' -> ["min"]
                          _ | n == max' -> ["max"]
                          _             -> [] )
+
+limitsOf :: Int -> Int -> [a] -> Gen ([a], [String])
+limitsOf min' max' xs = do
+  n  <- QS.oneof [QS.choose (min', max'), QS.elements [min', max']]
+  ys <- QS.vectorOf n $ QS.elements xs
+  return ( ys, case n of _ | n == min' -> ["min"]
+                         _ | n == max' -> ["max"]
+                         _             -> [] )

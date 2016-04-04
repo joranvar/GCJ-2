@@ -1,6 +1,6 @@
 module Solution (P(..), S(..), solve') where
 import Data.List (delete)
-import GCJ (Problem(..), Solution(..), TestSet(..), limits)
+import GCJ (Problem(..), Solution(..), TestSet(..), limits, limitsOf)
 import qualified Test.QuickCheck as QS
 
 newtype SearchEngine = SearchEngine String deriving (Eq, Show)
@@ -26,14 +26,22 @@ instance GCJ.Problem P where
                             , generator =  do
                                 (ss, sLabel) <- GCJ.limits 2 10
                                 (qs, qLabel) <- GCJ.limits 0 100
-                                return $ (P (map SearchEngine ss) (map Query qs), concat [map ("s:" ++ ) sLabel, map ("q:" ++) qLabel])
+                                (overlappers, oLabel) <- GCJ.limitsOf 0 (length qs) $ ss
+                                qs' <- QS.shuffle $ take (length qs) (overlappers ++ qs)
+                                return $ (P (map SearchEngine ss) (map Query qs'), concat [ map ("s:" ++ ) sLabel
+                                                                                          , map ("q:" ++) qLabel
+                                                                                          , map ("overlap:" ++) oLabel ])
                             , testRuntime = 4 * 60 * 1000
                             , numCases = 20 }
                   , TestSet { name = "Large"
                             , generator = do
                                 (ss, sLabel) <- GCJ.limits 2 100
                                 (qs, qLabel) <- GCJ.limits 0 1000
-                                return $ (P (map SearchEngine ss) (map Query qs), concat [map ("s:" ++ ) sLabel, map ("q:" ++) qLabel])
+                                (overlappers, oLabel) <- GCJ.limitsOf 0 (length qs) $ ss
+                                qs' <- QS.shuffle $ take (length qs) (overlappers ++ qs)
+                                return $ (P (map SearchEngine ss) (map Query qs'), concat [ map ("s:" ++ ) sLabel
+                                                                                          , map ("q:" ++) qLabel
+                                                                                          , map ("overlap:" ++) oLabel ])
                             , testRuntime = 8 * 60 * 1000
                             , numCases = 20 } ]
 
