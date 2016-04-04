@@ -1,6 +1,6 @@
 module Solution (P(..), S(..), solve') where
 import Data.List (delete)
-import GCJ (Problem(..), Solution(..), TestSet(..))
+import GCJ (Problem(..), Solution(..), TestSet(..), limits)
 import qualified Test.QuickCheck as QS
 
 newtype SearchEngine = SearchEngine String deriving (Eq, Show)
@@ -24,34 +24,18 @@ instance GCJ.Problem P where
 
   setGenerators = [ TestSet { name = "Small"
                             , generator =  do
-                                s <- QS.oneof [QS.choose (2, 10), QS.elements [2, 10]]
-                                ss <- QS.vector s
-                                q <- QS.oneof [QS.choose (0, 100), QS.elements [0, 100]]
-                                qs <- QS.vector q
-                                return $ P (map SearchEngine ss) (map Query qs)
+                                (ss, sLabel) <- GCJ.limits 2 10
+                                (qs, qLabel) <- GCJ.limits 0 100
+                                return $ (P (map SearchEngine ss) (map Query qs), concat [map ("s:" ++ ) sLabel, map ("q:" ++) qLabel])
                             , testRuntime = 4 * 60 * 1000
                             , numCases = 20 }
                   , TestSet { name = "Large"
                             , generator = do
-                                s <- QS.oneof [QS.choose (2, 100), QS.elements [2, 100]]
-                                ss <- QS.vector s
-                                q <- QS.oneof [QS.choose (0, 1000), QS.elements [0, 1000]]
-                                qs <- QS.vector q
-                                return $ P (map SearchEngine ss) (map Query qs)
+                                (ss, sLabel) <- GCJ.limits 2 100
+                                (qs, qLabel) <- GCJ.limits 0 1000
+                                return $ (P (map SearchEngine ss) (map Query qs), concat [map ("s:" ++ ) sLabel, map ("q:" ++) qLabel])
                             , testRuntime = 8 * 60 * 1000
                             , numCases = 20 } ]
-
-  classify (P ss qs) = filter ((/=) "") [q, s] where
-    s = case length ss of
-           100 -> "large maximal s"
-           10 -> "small maximal s"
-           2 -> "minimal s"
-           _ -> ""
-    q = case length qs of
-           1000 -> "large maximal q"
-           100 -> "small maximal q"
-           0 -> "minimal q"
-           _ -> ""
 
 data S = S Int
   deriving (Eq, Show)

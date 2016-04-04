@@ -17,7 +17,7 @@ checks :: R P S -> [Property]
 checks (R solve) = map (\testset ->
                            within (testRuntime testset `div` numCases testset)
                            $ label (name testset)
-                           $ forAll (generator testset) (\p -> (flip . foldr) label (classify p) . property . (/=) "" . display (-1) $ solve p))
+                           $ forAll (generator testset) (\(p, labels) -> (flip . foldr) label labels . property . (/=) "" . display (-1) $ solve p))
                    $ setGenerators
 
 limits :: Int
