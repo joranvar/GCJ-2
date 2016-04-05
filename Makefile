@@ -31,7 +31,10 @@ test: $(Test)
 	$(Test)
 
 .PHONY: all
-all: $(Main)
+all: $(Main) source.zip
+
+source.zip: Main.hs $(Solution)
+	zip -u1o $@ $^
 
 .PHONY: clean
 clean: cleanall
