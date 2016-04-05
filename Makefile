@@ -23,7 +23,7 @@ GCJ = GCJ.hs
 Solution = GCJ/Y2008/Q/A.hs $(GCJ)
 
 # Dependencies
-$(Main): Main.hs
+$(Main): Main.hs $(Solution)
 $(Test): Test.hs $(HUnit) $(Solution) $(QuickCheck)
 
 .PHONY: test
