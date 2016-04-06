@@ -1,6 +1,8 @@
-module Solution (P(..), S(..), solve') where
+{-# LANGUAGE MultiParamTypeClasses #-}
+
+module Solution (P(..), S(..), R(..)) where
 import Data.List (delete)
-import GCJ (Problem(..), Solution(..), TestSet(..), limits, limitsOf)
+import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..), limits, limitsOf)
 import qualified Test.QuickCheck as QS
 
 newtype SearchEngine = SearchEngine String deriving (Eq, Show)
@@ -45,9 +47,10 @@ instance GCJ.Solution S where
   display n (S i) = "Case #" ++ show n ++ ": " ++ show i
   displayExamples = [([S 1, S 0], "Case #1: 1\nCase #2: 0\n")]
 
-solve' :: P -> S
-solve' (P _ []) = S 0
-solve' (P ss qs) = S $ result 0 ss qs
-  where result acc _ [] = acc
-        result acc [] qs' = result (acc + 1) ss qs'
-        result acc ss' (Query q:qs') = result acc (delete (SearchEngine q) ss') qs'
+data R = R
+instance GCJ.Runner R P S where
+  solve R (P _ []) = S 0
+  solve R (P ss qs) = S $ result 0 ss qs
+    where result acc _ [] = acc
+          result acc [] qs' = result (acc + 1) ss qs'
+          result acc ss' (Query q:qs') = result acc (delete (SearchEngine q) ss') qs'
