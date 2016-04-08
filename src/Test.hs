@@ -22,7 +22,7 @@ checks r = map (\testset ->
                  $ forAll (generator testset) (\(p, labels) -> (flip . foldr) label labels . property . (/=) "" . display (-1) $ solve r p)) setGenerators
 
 checkProperties :: R -> [Property]
-checkProperties r = map (\test -> forAll gen (\(p, _) -> test p (solve r p))) $ props r
+checkProperties r = map (\(name, test) -> label name $ forAll gen (\(p, _) -> test p (solve r p))) $ props r
   where gen = generator $ head setGenerators
 
 main :: IO ()
