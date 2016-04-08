@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Solution (P(..), S(..), R(..)) where
-import Data.List (delete)
+import Data.List (delete, nub)
 import qualified Data.Set as Set
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..), limits, limitsOf)
 import qualified Test.QuickCheck as QS
@@ -34,7 +34,7 @@ instance GCJ.Problem P where
                             , testRuntime = 8 * 60 * 1000
                             , numCases = 20 } ]
     where generate (minS, maxS) (minQ, maxQ) =  do
-            (ss, sLabel) <- GCJ.limits minS maxS
+            (ss, sLabel) <- GCJ.limits minS maxS `QS.suchThat` ((>minS) . length . nub . fst)
             (qs, qLabel) <- GCJ.limits minQ maxQ
             (overlappers, oLabel) <- GCJ.limitsOf 0 (length qs) ss
             qs' <- QS.shuffle $ take (length qs) (overlappers ++ qs)
