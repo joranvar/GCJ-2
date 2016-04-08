@@ -1,8 +1,10 @@
-import Test.HUnit (runTestTT, Test(..), (~:), (~?=))
-import Test.QuickCheck (quickCheck, within, forAll, Property, label, property)
-import Control.Monad (void)
+import Test.HUnit (runTestTT, Test(..), (~:), (~?=), Counts(..))
+import Test.QuickCheck (quickCheckResult, within, forAll, Property, label, property)
+import Test.QuickCheck.Test (isSuccess)
+import Control.Monad (unless)
 import Solution (P(..), S(..), R(..))
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..))
+import System.Exit (exitFailure)
 
 tests :: R -> Test
 tests r =
@@ -24,7 +26,10 @@ checkProperties r = map (\test -> forAll gen (\(p, _) -> test p (solve r p))) $ 
   where gen = generator $ head setGenerators
 
 main :: IO ()
-main = sequence_ [ void . runTestTT $ tests R
-                 , mapM_ quickCheck $ checks R
-                 , mapM_ quickCheck $ checkProperties R
-                 ]
+main = do
+  testResults <- runTestTT $ tests R
+  checkResults <- mapM quickCheckResult $ checks R
+  propertyResults <- mapM quickCheckResult $ checkProperties R
+  unless ( errors testResults == 0 &&
+           all isSuccess checkResults &&
+           all isSuccess propertyResults ) exitFailure
