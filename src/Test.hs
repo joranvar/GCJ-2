@@ -19,7 +19,12 @@ checks r = map (\testset ->
                  $ label (name testset)
                  $ forAll (generator testset) (\(p, labels) -> (flip . foldr) label labels . property . (/=) "" . display (-1) $ solve r p)) setGenerators
 
+checkProperties :: R -> [Property]
+checkProperties r = map (\test -> forAll gen (\(p, _) -> test p (solve r p))) $ props r
+  where gen = generator $ head setGenerators
+
 main :: IO ()
 main = sequence_ [ void . runTestTT $ tests R
                  , mapM_ quickCheck $ checks R
+                 , mapM_ quickCheck $ checkProperties R
                  ]

@@ -20,6 +20,7 @@ class Solution s where
 class (Problem p, Solution s) => Runner r p s | r -> p s where
   interactor :: r -> String -> String
   solve :: r -> p -> s
+  props :: r -> [p -> s -> Bool]
   interactor r = unlines . zipWith display [1..] . map (solve r) . parse . tail . lines
 
 limits :: (QS.Arbitrary a) => Int -> Int -> Gen ([a], [String])

@@ -56,3 +56,5 @@ instance GCJ.Runner R P S where
     where result acc _ [] = acc
           result acc [] qs' = result (acc + 1) (Set.elems ss) qs'
           result acc ss' (Query q:qs') = result acc (delete (SearchEngine q) ss') qs'
+
+  props R = [\(P _ qs) (S i) -> i < length qs]
