@@ -13,6 +13,7 @@ vpath %.hs src
 # Targets
 Main = $(call HASKELL_mkTarget,Main)
 Test = $(call HASKELL_mkTarget,Test)
+Zip  = $(MAKE_binDir)/source.zip
 
 # Cabal dependencies
 HUnit = $(call HASKELL_mkCabalDep,HUnit)
@@ -31,11 +32,11 @@ test: $(Test)
 	$(Test)
 
 .PHONY: all
-all: $(Main) source.zip
+all: $(Main) $(Zip)
 
-source.zip: Main.hs $(Solution)
+$(Zip): Main.hs $(Solution)
 	zip -u1o $@ $^
 
 .PHONY: clean
 clean: cleanall
-	-rm -f source.zip
+	-rm -f $(Zip)
