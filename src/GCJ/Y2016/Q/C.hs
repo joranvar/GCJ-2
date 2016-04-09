@@ -2,6 +2,7 @@
 
 module Solution (P(..), S(..), R(..)) where
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..))
+import Data.List (unfoldr)
 
 data P = P Int Int
   deriving (Eq, Show)
@@ -45,3 +46,9 @@ instance GCJ.Runner R P S where
   props R =
     [ 
     ]
+
+primes :: [Integer]
+primes = (2:) $ concat $ unfoldr (\(p:xs) ->
+                                   let (small,large) = span (<p*p) xs in
+                                   Just (p:small, [x | x<-large
+                                                     , all (\f -> x`mod`f/=0) (p:small)])) [3,5..]
