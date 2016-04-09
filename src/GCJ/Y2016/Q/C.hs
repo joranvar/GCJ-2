@@ -3,6 +3,7 @@
 module Solution (P(..), S(..), R(..)) where
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..))
 import Data.Bits (bit, shift)
+import Data.Digits (digits, unDigits)
 import Data.List (unfoldr)
 
 data P = P Int Int
@@ -34,10 +35,11 @@ data S = S [Coin]
   deriving (Eq, Show)
 instance GCJ.Solution S where
   display n (S coins) = init $ "Case #" ++ show n ++ ":\n" ++ unlines (map displayDivisors coins) where
-    displayDivisors (i, ds) = show i ++ concatMap (\d -> " " ++ show d) ds
-  displayExamples = [( [S [(100011, [5, 13, 147, 31, 43, 1121, 73, 77, 629])
-                          ,(111111, [21, 26, 105, 1302, 217, 1032, 513, 13286, 10101])
-                          ,(111001, [3, 88, 5, 1938, 7, 208, 3, 20, 11])] ]
+    displayDivisors (i, ds) = showBinary i ++ concatMap (\d -> " " ++ show d) ds
+    showBinary i = concatMap show $ digits 2 i
+  displayExamples = [( [S [((unDigits 2) [1,0,0,0,1,1], [5, 13, 147, 31, 43, 1121, 73, 77, 629])
+                          ,((unDigits 2) [1,1,1,1,1,1], [21, 26, 105, 1302, 217, 1032, 513, 13286, 10101])
+                          ,((unDigits 2) [1,1,1,0,0,1], [3, 88, 5, 1938, 7, 208, 3, 20, 11])] ]
                      , "Case #1:\n100011 5 13 147 31 43 1121 73 77 629\n111111 21 26 105 1302 217 1032 513 13286 10101\n111001 3 88 5 1938 7 208 3 20 11\n" )]
 
 data R = R

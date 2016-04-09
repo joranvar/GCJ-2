@@ -18,10 +18,11 @@ Zip  = $(MAKE_binDir)/source.zip
 # Cabal dependencies
 HUnit = $(call HASKELL_mkCabalDep,HUnit)
 QuickCheck = $(call HASKELL_mkCabalDep,QuickCheck)
+Digits = $(call HASKELL_mkCabalDep,digits)
 
 # Groups
 GCJ = GCJ.hs
-Solution = GCJ/Y2016/Q/C.hs $(GCJ)
+Solution = GCJ/Y2016/Q/C.hs $(GCJ) $(Digits)
 
 # Dependencies
 $(Main): Main.hs $(Solution)
