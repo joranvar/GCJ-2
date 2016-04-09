@@ -20,11 +20,11 @@ instance GCJ.Problem P where
 
   setGenerators = [ TestSet { name = "Small"
                             , generator = generate 16 50
-                            , testRuntime = 4 * 60 * 1000
+                            , testRuntime = 4 * 60 * 1000 * 1000
                             , numCases = 1 }
                   , TestSet { name = "Large"
                             , generator = generate 32 500
-                            , testRuntime = 8 * 60 * 1000
+                            , testRuntime = 8 * 60 * 1000 * 1000
                             , numCases = 1 } ]
     where generate n j =  do
             return ( P n j , [] )

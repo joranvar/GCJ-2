@@ -19,7 +19,7 @@ checks :: R -> [Property]
 checks r = map (\testset ->
                  within (testRuntime testset `div` numCases testset)
                  $ label (name testset)
-                 $ forAll (generator testset) (\(p, labels) -> (flip . foldr) label labels . property . (/=) "" . display (-1) $ solve r p)) setGenerators
+                 $ forAll (generator testset) (\(p, labels) -> (flip . foldr) label labels . property . (/=) "Case #-1:" . display (-1) $ solve r p)) setGenerators
 
 checkProperties :: R -> [Property]
 checkProperties r = map (\(name, test) -> label name $ forAll gen (\(p, _) -> test p (solve r p))) $ props r
