@@ -42,6 +42,8 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
+  solve R (P ps) | all (==Smile) ps = S 0
+  solve R (P ps) | all (==Blank) ps = S 1
   solve R (P _) = S 0
 
   props R =
