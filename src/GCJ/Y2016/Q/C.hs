@@ -53,9 +53,10 @@ instance GCJ.Runner R P S where
       let divisors = map (firstDivisor . toBase coinProspect) [2..10] in
       if all isJust divisors then Just (coinProspect, catMaybes divisors) else Nothing
     firstDivisor :: Integer -> Maybe Divisor
-    firstDivisor i = case find (>=i) primes of
-      Just p | p == i -> Nothing
-      _ -> find (\p -> i`mod`p == 0) primes
+    firstDivisor i = case find (\p -> i`mod`p == 0 || p>=i) primes of
+      Just p | p >= i -> Nothing
+      Just p -> Just p
+      _ -> Nothing
     generate :: Int -> [Integer]
     generate len = map (toCoinProspect len) [0..(bit (max 0 $ len-2) - 1)]
     toCoinProspect :: Int -> Integer -> Integer
