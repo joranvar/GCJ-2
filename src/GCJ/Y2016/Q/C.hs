@@ -26,8 +26,8 @@ instance GCJ.Problem P where
     where generate n j =  do
             return ( P n j , [] )
 
-type Divisor = Int
-type Coin = (Int, [Divisor])
+type Divisor = Integer
+type Coin = (Integer, [Divisor])
 
 data S = S [Coin]
   deriving (Eq, Show)
