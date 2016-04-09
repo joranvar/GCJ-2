@@ -23,13 +23,12 @@ class (Problem p, Solution s) => Runner r p s | r -> p s where
   props :: r -> [(String, p -> s -> Bool)]
   interactor r = unlines . zipWith display [1..] . map (solve r) . parse . tail . lines
 
-limits :: (QS.Arbitrary a) => Int -> Int -> Gen ([a], [String])
+limits :: Int -> Int -> Gen (Int, [String])
 limits min' max' = do
   n  <- QS.oneof [QS.choose (min', max'), QS.elements [min', max']]
-  xs <- QS.vector n
-  return ( xs, case n of _ | n == min' -> ["min"]
-                         _ | n == max' -> ["max"]
-                         _             -> [] )
+  return ( n, case n of _ | n == min' -> ["min"]
+                        _ | n == max' -> ["max"]
+                        _             -> [] )
 
 limitsOf :: Int -> Int -> [a] -> Gen ([a], [String])
 limitsOf min' max' xs = do
