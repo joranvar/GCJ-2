@@ -54,7 +54,7 @@ instance GCJ.Runner R P S where
       $ reverse $ sortOn (length . catMaybes . snd)
       $ fromJust
       $ find haveEnough
-      $ scanl (\prospects prime -> map (addDivisor prime) prospects) allCoinProspects primes
+      $ scanl (\prospects prime -> map (addDivisor prime) prospects) (take 10000 allCoinProspects) primes
 
     haveEnough :: [CoinProspect] -> Bool
     haveEnough = (==j) . length . take j . filter ((==9) . length . catMaybes . snd)
