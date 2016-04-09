@@ -54,8 +54,6 @@ instance GCJ.Runner R P S where
     allGood _ = Nothing
     addDivisors :: Integer -> CoinCheck
     addDivisors coinProspect = (coinProspect, map (firstDivisor . toBase coinProspect) [2..10])
-    toBase :: Integer -> Int -> Integer
-    toBase i base = unDigits (fromIntegral base) $ digits 10 i
     firstDivisor :: Integer -> Maybe Divisor
     firstDivisor i | i `elem` (takeWhile (<=i) primes) = Nothing
     firstDivisor i = Just $ head $ filter (\p -> i`mod`p == 0) (takeWhile (<i) primes)
@@ -65,7 +63,11 @@ instance GCJ.Runner R P S where
     toCoinProspect len filling = (bit len) + (shift filling 1) + 1
 
   props R =
-    [ 
+    [ ( "Correct"
+      , \_ (S coins) ->
+        all (\(coin, divisors) ->
+              all (\(base, divisor) -> toBase coin base `mod` divisor == 0)
+              $ zip [2..] divisors) coins )
     ]
 
 primes :: [Integer]
@@ -73,3 +75,6 @@ primes = (2:) $ concat $ unfoldr (\(p:xs) ->
                                    let (small,large) = span (<p*p) xs in
                                    Just (p:small, [x | x<-large
                                                      , all (\f -> x`mod`f/=0) (p:small)])) [3,5..]
+
+toBase :: Integer -> Int -> Integer
+toBase i base = unDigits (fromIntegral base) $ digits 10 i
