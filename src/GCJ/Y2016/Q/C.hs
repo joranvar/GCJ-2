@@ -5,6 +5,7 @@ import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..))
 import Data.Bits (bit, shift)
 import Data.Digits (digits, unDigits)
 import Data.List (unfoldr)
+import Data.Maybe (catMaybes, isJust)
 
 data P = P Int Int
   deriving (Eq, Show)
@@ -30,6 +31,7 @@ instance GCJ.Problem P where
 
 type Divisor = Integer
 type Coin = (Integer, [Divisor])
+type CoinCheck = (Integer, [Maybe Divisor])
 
 data S = S [Coin]
   deriving (Eq, Show)
@@ -46,11 +48,17 @@ data R = R
 instance GCJ.Runner R P S where
   solve R (P n j) = S (take j $ mine n) where
     mine :: Int -> [Coin]
-    mine len = takeWhile allGood $ map addDivisors $ generate len
-    allGood :: Coin -> Bool
-    allGood = undefined
-    addDivisors :: Integer -> Coin
-    addDivisors = undefined
+    mine len =  catMaybes $ map allGood $ map addDivisors $ generate len
+    allGood :: CoinCheck -> Maybe Coin
+    allGood (i, ds) | all isJust ds = Just (i, catMaybes ds)
+    allGood _ = Nothing
+    addDivisors :: Integer -> CoinCheck
+    addDivisors coinProspect = (coinProspect, map (firstDivisor . toBase coinProspect) [2..10])
+    toBase :: Integer -> Int -> Integer
+    toBase i base = unDigits (fromIntegral base) $ digits 10 i
+    firstDivisor :: Integer -> Maybe Divisor
+    firstDivisor i | i `elem` (takeWhile (<=i) primes) = Nothing
+    firstDivisor i = Just $ head $ filter (\p -> i`mod`p == 0) (takeWhile (<i) primes)
     generate :: Int -> [Integer]
     generate len = map (toCoinProspect len) [0..bit (len-2)]
     toCoinProspect :: Int -> Integer -> Integer
