@@ -58,9 +58,9 @@ instance GCJ.Runner R P S where
     firstDivisor i | i `elem` (takeWhile (<=i) primes) = Nothing
     firstDivisor i = Just $ head $ filter (\p -> i`mod`p == 0) (takeWhile (<i) primes)
     generate :: Int -> [Integer]
-    generate len = map (toCoinProspect len) [0..bit (len-2)]
+    generate len = map (toCoinProspect len) [0..(bit (max 0 $ len-2) - 1)]
     toCoinProspect :: Int -> Integer -> Integer
-    toCoinProspect len filling = (bit len) + (shift filling 1) + 1
+    toCoinProspect len filling = (bit (max 0 $ len-1)) + (shift filling 1) + 1
 
   props R =
     [ ( "Correct"
