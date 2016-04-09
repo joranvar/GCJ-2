@@ -4,7 +4,7 @@ module Solution (P(..), S(..), R(..)) where
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..))
 import Data.Bits (bit, shift)
 import Data.Digits (digits, unDigits)
-import Data.List (unfoldr)
+import Data.List (unfoldr, find)
 import Data.Maybe (catMaybes, isJust)
 
 data P = P Int Int
@@ -31,7 +31,6 @@ instance GCJ.Problem P where
 
 type Divisor = Integer
 type Coin = (Integer, [Divisor])
-type CoinCheck = (Integer, [Maybe Divisor])
 
 data S = S [Coin]
   deriving (Eq, Show)
@@ -48,15 +47,15 @@ data R = R
 instance GCJ.Runner R P S where
   solve R (P n j) = S (take j $ mine n) where
     mine :: Int -> [Coin]
-    mine len =  catMaybes $ map allGood $ map addDivisors $ generate len
-    allGood :: CoinCheck -> Maybe Coin
-    allGood (i, ds) | all isJust ds = Just (i, catMaybes ds)
-    allGood _ = Nothing
-    addDivisors :: Integer -> CoinCheck
-    addDivisors coinProspect = (coinProspect, map (firstDivisor . toBase coinProspect) [2..10])
+    mine len =  catMaybes $ map addDivisors $ generate len
+    addDivisors :: Integer -> Maybe Coin
+    addDivisors coinProspect =
+      let divisors = map (firstDivisor . toBase coinProspect) [2..10] in
+      if all isJust divisors then Just (coinProspect, catMaybes divisors) else Nothing
     firstDivisor :: Integer -> Maybe Divisor
-    firstDivisor i | i `elem` (takeWhile (<=i) primes) = Nothing
-    firstDivisor i = Just $ head $ filter (\p -> i`mod`p == 0) (takeWhile (<i) primes)
+    firstDivisor i = case find (>=i) primes of
+      Just p | p == i -> Nothing
+      _ -> find (\p -> i`mod`p == 0) primes
     generate :: Int -> [Integer]
     generate len = map (toCoinProspect len) [0..(bit (max 0 $ len-2) - 1)]
     toCoinProspect :: Int -> Integer -> Integer
