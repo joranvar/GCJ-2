@@ -14,6 +14,7 @@ instance GCJ.Problem P where
     where n:rest = inp
           parsePancake '-' = Blank
           parsePancake '+' = Smile
+          parsePancake _ = undefined
 
   parseExamples = [ ( "5\n-\n-+\n+-\n+++\n--+-\n"
                     , [ P [Blank], P [Blank, Smile], P [Smile, Blank], P [Smile, Smile, Smile]
