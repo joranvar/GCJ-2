@@ -3,6 +3,7 @@
 module Solution (P(..), S(..), R(..)) where
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..), limitsOf)
 import qualified Test.QuickCheck as QS
+import Control.Arrow (first, second)
 
 data Pancake = Smile | Blank deriving (Eq, Show)
 
@@ -42,9 +43,19 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
-  solve R (P ps) | all (==Smile) ps = S 0
-  solve R (P ps) | all (==Blank) ps = S 1
-  solve R (P _) = S 0
+  solve R (P ps) = S (solve' ps) where
+    solve' ps' | all (==Smile) ps' = 0
+    solve' ps' | all (==Blank) ps' = 1
+    solve' (ps'@(Smile:_)) = 1 + solve' flipsmiles where
+      flipsmiles = blanks ++ rest
+      (smiles, rest) = break (==Blank) ps'
+      blanks = map (const Blank) smiles
+    solve' (ps'@(Blank:_)) = 1 + solve' flipUpToSmiles where
+      flipUpToSmiles = flipped ++ smiles
+      flipped = map flipIt $ reverse toFlip
+      flipIt Blank = Smile
+      flipIt Smile = Blank
+      (smiles, toFlip) = first reverse $ second reverse $ break (==Blank) $ reverse ps'
 
   props R =
     [ 
