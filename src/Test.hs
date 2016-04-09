@@ -16,20 +16,24 @@ tests r =
               ]
 
 checks :: R -> [Property]
-checks r = map (\testset ->
-                 within (testRuntime testset `div` numCases testset)
-                 $ label (name testset)
-                 $ forAll (generator testset) (\(p, labels) -> (flip . foldr) label labels . property . (/=) "" . display (-1) $ solve r p)) setGenerators
-
-checkProperties :: R -> [Property]
-checkProperties r = map (\(name, test) -> label name $ forAll gen (\(p, _) -> test p (solve r p))) $ props r
-  where gen = generator $ head setGenerators
+checks r =
+  map (\testset ->
+        within (testRuntime testset `div` numCases testset)
+        $ label (name testset)
+        $ forAll (generator testset) (\(p, labels) ->
+                                       let s = solve r p
+                                           results = map (\(propertyName, test) ->
+                                                           let result = test p s in
+                                                           (result, if result then [propertyName] else []))
+                                             $ props r
+                                       in
+                                         (flip . foldr) label (labels ++ concatMap snd results) .
+                                         property $ all fst results ) )
+  $ setGenerators
 
 main :: IO ()
 main = do
   testResults <- runTestTT $ tests R
   checkResults <- mapM quickCheckResult $ checks R
-  propertyResults <- mapM quickCheckResult $ checkProperties R
   unless ( errors testResults == 0 &&
-           all isSuccess checkResults &&
-           all isSuccess propertyResults ) exitFailure
+           all isSuccess checkResults ) exitFailure

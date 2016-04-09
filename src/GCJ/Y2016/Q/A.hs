@@ -43,5 +43,5 @@ instance GCJ.Runner R P S where
     solve' ds n' = solve' (ds `Set.union` Set.fromList (show n')) (n' + n)
 
   props R =
-    [ 
+    [ ("Insomnia only at 0", \(P n) s -> s == Insomnia || n > 0)
     ]

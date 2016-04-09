@@ -18,10 +18,12 @@ Zip  = $(MAKE_binDir)/source.zip
 # Cabal dependencies
 HUnit = $(call HASKELL_mkCabalDep,HUnit)
 QuickCheck = $(call HASKELL_mkCabalDep,QuickCheck)
+Digits = $(call HASKELL_mkCabalDep,digits)
+Parallel = $(call HASKELL_mkCabalDep,parallel)
 
 # Groups
 GCJ = GCJ.hs
-Solution = GCJ/Y2016/Q/B.hs $(GCJ)
+Solution = GCJ/Y2016/Q/C.hs $(GCJ) $(Digits) $(Parallel)
 
 # Dependencies
 $(Main): Main.hs $(Solution)
@@ -29,7 +31,7 @@ $(Test): Test.hs $(HUnit) $(Solution) $(QuickCheck)
 
 .PHONY: test
 test: $(Test)
-	$(Test)
+	$(Test) +RTS -N
 
 .PHONY: all
 all: $(Main) $(Zip)
