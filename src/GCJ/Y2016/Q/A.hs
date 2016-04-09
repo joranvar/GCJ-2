@@ -36,6 +36,7 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
+  solve R (P 0 ) = Insomnia
   solve R (P _ ) = S 0
 
   props R =
