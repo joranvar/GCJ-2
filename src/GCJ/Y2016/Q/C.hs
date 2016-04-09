@@ -31,8 +31,8 @@ type Coin = (Int, [Divisor])
 data S = S [Coin]
   deriving (Eq, Show)
 instance GCJ.Solution S where
-  display n (S coins) = "Case #" ++ show n ++ ":\n" ++ (unlines $ map displayDivisors coins) where
-    displayDivisors (i, ds) = show i ++ concatMap (\d -> show " " ++ show d) ds
+  display n (S coins) = init $ "Case #" ++ show n ++ ":\n" ++ unlines (map displayDivisors coins) where
+    displayDivisors (i, ds) = show i ++ concatMap (\d -> " " ++ show d) ds
   displayExamples = [( [S [(100011, [5, 13, 147, 31, 43, 1121, 73, 77, 629])
                           ,(111111, [21, 26, 105, 1302, 217, 1032, 513, 13286, 10101])
                           ,(111001, [3, 88, 5, 1938, 7, 208, 3, 20, 11])] ]
