@@ -51,5 +51,8 @@ instance GCJ.Runner R P S where
   solve R _ = S []
 
   props R =
-    [
+    [ ( "s is honored"
+      , \(P _ _ s) (S is) -> length is <= s )
+    , ( "k^C is honored"
+      , \(P k c _) (S is) -> all (<=k^c) is )
     ]
