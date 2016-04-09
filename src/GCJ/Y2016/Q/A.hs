@@ -2,6 +2,7 @@
 
 module Solution (P(..), S(..), R(..)) where
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..), limits)
+import qualified Data.Set as Set
 
 data P = P Int
   deriving (Eq, Show)
@@ -37,7 +38,9 @@ instance GCJ.Solution S where
 data R = R
 instance GCJ.Runner R P S where
   solve R (P 0 ) = Insomnia
-  solve R (P _ ) = S 0
+  solve R (P n ) = S $ solve' Set.empty n where
+    solve' ds n' | Set.size ds == 10 = n' - n
+    solve' ds n' = solve' (ds `Set.union` Set.fromList (show n')) (n' + n)
 
   props R =
     [ 
