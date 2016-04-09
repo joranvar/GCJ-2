@@ -38,3 +38,4 @@ source.zip: Main.hs $(Solution)
 
 .PHONY: clean
 clean: cleanall
+	-rm -f source.zip
