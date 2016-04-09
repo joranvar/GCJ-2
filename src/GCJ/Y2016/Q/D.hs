@@ -36,18 +36,18 @@ instance GCJ.Problem P where
                             , map ("c:" ++ ) cLabel
                             , map ("s:" ++ ) (if sIsK then kLabel else sLabel)])
 
-data S = S [Int] | Impossible
+data S = S [Int]
   deriving (Eq, Show)
 instance GCJ.Solution S where
-  display n Impossible = "Case #" ++ show n ++ ": IMPOSSIBLE"
+  display n (S []) = "Case #" ++ show n ++ ": IMPOSSIBLE"
   display n (S is) = "Case #" ++ show n ++ ":" ++ concatMap (\i -> " " ++ show i) is
-  displayExamples = [( [S [2], S [1], Impossible, S [1, 2], S [2, 6]]
+  displayExamples = [( [S [2], S [1], S [], S [1, 2], S [2, 6]]
                      , "Case #1: 2\nCase #2: 1\nCase #3: IMPOSSIBLE\nCase #4: 1 2\nCase #5: 2 6\n" )]
 
 data R = R
 instance GCJ.Runner R P S where
   solve R (P k 1 s) | k == s = S [1..s]
-  solve R _ = Impossible
+  solve R _ = S []
 
   props R =
     [
