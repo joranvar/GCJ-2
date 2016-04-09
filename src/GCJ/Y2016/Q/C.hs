@@ -63,7 +63,11 @@ instance GCJ.Runner R P S where
     toCoinProspect len filling = (bit (max 0 $ len-1)) + (shift filling 1) + 1
 
   props R =
-    [ ( "Correct"
+    [ ( "j is honored"
+      , \(P _ j) (S coins) -> length coins == j )
+    , ( "Length of coins is honored"
+      , \(P n _) (S coins) -> all (\(coin, _) -> length (digits 2 coin) == n ) coins )
+    , ( "All divisors"
       , \_ (S coins) ->
         all (\(coin, divisors) ->
               all (\(base, divisor) -> toBase coin base `mod` divisor == 0)
