@@ -41,7 +41,15 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
-  solve R (P n j) = S []
+  solve R (P n j) = S (take j $ mine n) where
+    mine :: Int -> [Coin]
+    mine len = takeWhile allGood $ map addDivisors $ generate len
+    allGood :: Coin -> Bool
+    allGood = undefined
+    addDivisors :: Integer -> Coin
+    addDivisors = undefined
+    generate :: Int -> [Integer]
+    generate = undefined
 
   props R =
     [ 
