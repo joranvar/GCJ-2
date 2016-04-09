@@ -46,8 +46,8 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
-  solve R (P k 1 s) | k == s = S [1..s]
   solve R (P 1 _ _) = S [1]
+  solve R (P k c s) | k == s = S $ map ((+1) . (*(k^(c-1)))) [0..(s-1)]
   solve R _ = S []
 
   props R =
