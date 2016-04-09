@@ -77,4 +77,4 @@ primes = (2:) $ concat $ unfoldr (\(p:xs) ->
                                                      , all (\f -> x`mod`f/=0) (p:small)])) [3,5..]
 
 toBase :: Integer -> Int -> Integer
-toBase i base = unDigits (fromIntegral base) $ digits 10 i
+toBase i base = unDigits (fromIntegral base) $ digits 2 i
