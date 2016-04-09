@@ -20,7 +20,7 @@ QuickCheck = $(call HASKELL_mkCabalDep,QuickCheck)
 
 # Groups
 GCJ = GCJ.hs
-Solution = GCJ/Y2008/Q/A.hs $(GCJ)
+Solution = GCJ/Y2016/Q/A.hs $(GCJ)
 
 # Dependencies
 $(Main): Main.hs $(Solution)
