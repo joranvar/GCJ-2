@@ -4,8 +4,9 @@ module Solution (P(..), S(..), R(..)) where
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..))
 import Data.Bits (bit, shift)
 import Data.Digits (digits, unDigits)
-import Data.List (unfoldr, find)
-import Data.Maybe (catMaybes, isJust)
+import Data.List (unfoldr, find, sortOn)
+import Data.Maybe (catMaybes, isNothing, fromJust)
+import Control.Arrow (second)
 
 data P = P Int Int
   deriving (Eq, Show)
@@ -31,6 +32,7 @@ instance GCJ.Problem P where
 
 type Divisor = Integer
 type Coin = (Integer, [Divisor])
+type CoinProspect = (Integer, [Maybe Divisor])
 
 data S = S [Coin]
   deriving (Eq, Show)
@@ -45,20 +47,34 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
-  solve R (P n j) = S (take j $ mine n) where
-    mine :: Int -> [Coin]
-    mine len =  catMaybes $ map addDivisors $ generate len
-    addDivisors :: Integer -> Maybe Coin
-    addDivisors coinProspect =
-      let divisors = map (firstDivisor . toBase coinProspect) [2..10] in
-      if all isJust divisors then Just (coinProspect, catMaybes divisors) else Nothing
-    firstDivisor :: Integer -> Maybe Divisor
-    firstDivisor i = case find (\p -> i`mod`p == 0 || p>=i) primes of
-      Just p | p >= i -> Nothing
-      Just p -> Just p
-      _ -> Nothing
+  solve R (P n j) = S (take j $ mine) where
+    mine :: [Coin]
+    mine =
+      map (second catMaybes)
+      $ reverse $ sortOn (length . catMaybes . snd)
+      $ fromJust
+      $ find haveEnough
+      $ scanl (\prospects prime -> map (addDivisor prime) prospects) allCoinProspects primes
+
+    haveEnough :: [CoinProspect] -> Bool
+    haveEnough = (==j) . length . take j . filter ((==9) . length . catMaybes . snd)
+
+    addDivisor :: Integer -> CoinProspect -> CoinProspect
+    addDivisor d (i, ds) =
+      ( i
+      , zipWith (\base md -> if isNothing md && dividesInBase base i d
+                             then Just d
+                             else md) [2..] ds )
+
+    dividesInBase :: Int -> Integer -> Integer -> Bool
+    dividesInBase base x divisor = (x `toBase` base) `mod` divisor == 0
+
+    allCoinProspects :: [CoinProspect]
+    allCoinProspects = map (\i -> (i, replicate 9 Nothing)) $ generate n
+
     generate :: Int -> [Integer]
     generate len = map (toCoinProspect len) [0..(bit (max 0 $ len-2) - 1)]
+
     toCoinProspect :: Int -> Integer -> Integer
     toCoinProspect len filling = (bit (max 0 $ len-1)) + (shift filling 1) + 1
 
@@ -67,6 +83,8 @@ instance GCJ.Runner R P S where
       , \(P _ j) (S coins) -> length coins == j )
     , ( "Length of coins is honored"
       , \(P n _) (S coins) -> all (\(coin, _) -> length (digits 2 coin) == n ) coins )
+    , ( "Number of bases is honored"
+      , \_ (S coins) -> all ((==9) . length . snd) coins)
     , ( "All divisors"
       , \_ (S coins) ->
         all (\(coin, divisors) ->
