@@ -2,6 +2,7 @@
 
 module Solution (P(..), S(..), R(..)) where
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..))
+import Data.Bits (bit, shift)
 import Data.List (unfoldr)
 
 data P = P Int Int
@@ -49,7 +50,9 @@ instance GCJ.Runner R P S where
     addDivisors :: Integer -> Coin
     addDivisors = undefined
     generate :: Int -> [Integer]
-    generate = undefined
+    generate len = map (toCoinProspect len) [0..bit (len-2)]
+    toCoinProspect :: Int -> Integer -> Integer
+    toCoinProspect len filling = (bit len) + (shift filling 1) + 1
 
   props R =
     [ 
