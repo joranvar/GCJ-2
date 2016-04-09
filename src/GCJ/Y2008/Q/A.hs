@@ -60,4 +60,9 @@ instance GCJ.Runner R P S where
   props R =
     [ ( "Length"
       , \(P _ qs) (S i) -> i < length qs || i == 0 )
+    , ( "Remove the vulgar"
+      , \(P ss qs) (S i) ->
+        let ss' = map (\(SearchEngine s) -> s) (Set.elems ss)
+            qs' = map (\(Query q) -> q) qs
+        in i < length (filter (`elem` ss') qs') || i == 0 )
     ]
