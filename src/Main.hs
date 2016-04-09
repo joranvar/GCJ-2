@@ -1,5 +1,5 @@
-import GCJ (R(..), Runner(..))
-import Solution (solve')
+import GCJ (Runner(..))
+import Solution (R(..))
 
 main :: IO ()
-main = interact (solve (R solve'))
+main = interact $ interactor R

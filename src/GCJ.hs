@@ -1,3 +1,6 @@
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FunctionalDependencies #-}
+
 module GCJ where
 
 import Test.QuickCheck (Gen)
@@ -14,12 +17,11 @@ class Solution s where
   display :: Int -> s -> String
   displayExamples :: [([s], String)]
 
-class Runner s where
-  solve :: s -> String -> String
-
-data R p s = R (p -> s)
-instance (Problem p, Solution s) => GCJ.Runner (R p s) where
-  solve (R r) = unlines . zipWith display [1..] . map r . parse . tail . lines
+class (Problem p, Solution s) => Runner r p s | r -> p s where
+  interactor :: r -> String -> String
+  solve :: r -> p -> s
+  props :: r -> [(String, p -> s -> Bool)]
+  interactor r = unlines . zipWith display [1..] . map (solve r) . parse . tail . lines
 
 limits :: (QS.Arbitrary a) => Int -> Int -> Gen ([a], [String])
 limits min' max' = do
