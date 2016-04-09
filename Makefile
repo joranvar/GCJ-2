@@ -23,7 +23,7 @@ Parallel = $(call HASKELL_mkCabalDep,parallel)
 
 # Groups
 GCJ = GCJ.hs
-Solution = GCJ/Y2016/Q/C.hs $(GCJ) $(Digits) $(Parallel)
+Solution = GCJ/Y2016/Q/D.hs $(GCJ) $(Digits) $(Parallel)
 
 # Dependencies
 $(Main): Main.hs $(Solution)
