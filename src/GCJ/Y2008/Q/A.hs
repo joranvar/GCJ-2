@@ -51,7 +51,6 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
-  solve R (P _ []) = S 0
   solve R (P ss qs) = S $ result 0 (Set.elems ss) qs
     where result acc _ [] = acc
           result acc [] qs' = result (acc + 1) (Set.elems ss) qs'
