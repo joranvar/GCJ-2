@@ -3,7 +3,7 @@
 module Solution (P(..), S(..), R(..)) where
 import Data.List (delete, nub)
 import qualified Data.Set as Set
-import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..), limits, limitsOf)
+import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..), limitsOf)
 import qualified Test.QuickCheck as QS
 
 newtype SearchEngine = SearchEngine String deriving (Eq, Show, Ord)
@@ -27,16 +27,16 @@ instance GCJ.Problem P where
 
   setGenerators = [ TestSet { name = "Small"
                             , generator = generate (2, 10) (0, 100)
-                            , testRuntime = 4 * 60 * 1000
+                            , testRuntime = 4 * 60 * 1000 * 1000
                             , numCases = 20 }
                   , TestSet { name = "Large"
                             , generator = generate (2, 100) (0, 1000)
-                            , testRuntime = 8 * 60 * 1000
+                            , testRuntime = 8 * 60 * 1000 * 1000
                             , numCases = 20 } ]
     where generate (minS, maxS) (minQ, maxQ) =  do
-            (ss, sLabel) <- GCJ.limits minS maxS `QS.suchThat` ((>minS) . length . nub . fst)
-            (qs, qLabel) <- GCJ.limits minQ maxQ
-            (overlappers, oLabel) <- GCJ.limitsOf 0 (length qs) ss
+            (ss, sLabel) <- GCJ.limitsOf minS maxS QS.arbitrary `QS.suchThat` ((>minS) . length . nub . fst)
+            (qs, qLabel) <- GCJ.limitsOf minQ maxQ QS.arbitrary
+            (overlappers, oLabel) <- GCJ.limitsOf 0 (length qs) $ QS.elements ss
             qs' <- QS.shuffle $ take (length qs) (overlappers ++ qs)
             return ( P (Set.fromList $ map SearchEngine ss) (map Query qs')
                    , concat [ map ("s:" ++ ) sLabel
