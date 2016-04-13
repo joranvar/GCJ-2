@@ -1,9 +1,9 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Solution (P(..), S(..), R(..)) where
-import Data.List (delete, nub)
+import Data.List (nub)
 import qualified Data.Set as Set
-import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..), limits, limitsOf)
+import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..), limitsOf)
 import qualified Test.QuickCheck as QS
 
 newtype SearchEngine = SearchEngine String deriving (Eq, Show, Ord)
@@ -27,16 +27,16 @@ instance GCJ.Problem P where
 
   setGenerators = [ TestSet { name = "Small"
                             , generator = generate (2, 10) (0, 100)
-                            , testRuntime = 4 * 60 * 1000
+                            , testRuntime = 4 * 60 * 1000 * 1000
                             , numCases = 20 }
                   , TestSet { name = "Large"
                             , generator = generate (2, 100) (0, 1000)
-                            , testRuntime = 8 * 60 * 1000
+                            , testRuntime = 8 * 60 * 1000 * 1000
                             , numCases = 20 } ]
     where generate (minS, maxS) (minQ, maxQ) =  do
-            (ss, sLabel) <- GCJ.limits minS maxS `QS.suchThat` ((>minS) . length . nub . fst)
-            (qs, qLabel) <- GCJ.limits minQ maxQ
-            (overlappers, oLabel) <- GCJ.limitsOf 0 (length qs) ss
+            (ss, sLabel) <- GCJ.limitsOf minS maxS QS.arbitrary `QS.suchThat` ((>minS) . length . nub . fst)
+            (qs, qLabel) <- GCJ.limitsOf minQ maxQ QS.arbitrary
+            (overlappers, oLabel) <- GCJ.limitsOf 0 (length qs) $ QS.elements ss
             qs' <- QS.shuffle $ take (length qs) (overlappers ++ qs)
             return ( P (Set.fromList $ map SearchEngine ss) (map Query qs')
                    , concat [ map ("s:" ++ ) sLabel
@@ -51,11 +51,11 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
-  solve R (P _ []) = S 0
-  solve R (P ss qs) = S $ result 0 (Set.elems ss) qs
+  solve R (P ss qs) = S $ result 0 ss qs
     where result acc _ [] = acc
-          result acc [] qs' = result (acc + 1) (Set.elems ss) qs'
-          result acc ss' (Query q:qs') = result acc (delete (SearchEngine q) ss') qs'
+          result acc ss' (Query q:qs') | ss' == Set.singleton (SearchEngine q) =
+                                         result (acc + 1) (ss Set.\\ ss') qs'
+          result acc ss' (Query q:qs') = result acc (Set.delete (SearchEngine q) ss') qs'
 
   props R =
     [ ( "Length"
@@ -65,4 +65,19 @@ instance GCJ.Runner R P S where
         let ss' = map (\(SearchEngine s) -> s) (Set.elems ss)
             qs' = map (\(Query q) -> q) qs
         in i < length (filter (`elem` ss') qs') || i == 0 )
+    ]
+
+  tests R =
+    [ ( "One query, no switch"
+      , P (Set.fromList $ map SearchEngine ["A", "B"]) ([Query "A"])
+      , \(S s) -> s == 0 )
+    , ( "Two queries, one switch"
+      , P (Set.fromList $ map SearchEngine ["A", "B"]) (map Query ["A", "B"])
+      , \(S s) -> s == 1 )
+    , ( "Three queries, one switch"
+      , P (Set.fromList $ map SearchEngine ["A", "B"]) (map Query ["A", "A", "B"])
+      , \(S s) -> s == 1 )
+    , ( "Three queries, two switches"
+      , P (Set.fromList $ map SearchEngine ["A", "B"]) (map Query ["A", "A", "B", "A"])
+      , \(S s) -> s == 2 )
     ]

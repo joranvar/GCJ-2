@@ -21,7 +21,10 @@ class (Problem p, Solution s) => Runner r p s | r -> p s where
   interactor :: r -> String -> String
   solve :: r -> p -> s
   props :: r -> [(String, p -> s -> Bool)]
+  tests :: r -> [(String, p, s -> Bool)]
   interactor r = unlines . zipWith display [1..] . map (solve r) . parse . tail . lines
+  props _ = []
+  tests _ = []
 
 limits :: Int -> Int -> Gen (Int, [String])
 limits min' max' = do
