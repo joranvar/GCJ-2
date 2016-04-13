@@ -73,7 +73,7 @@ data S = S Int Int
   deriving (Eq, Show)
 instance GCJ.Solution S where
   display n (S a b) = "Case #" ++ show n ++ ": " ++ show a ++ " " ++ show b
-  displayExamples = [([], "")]
+  displayExamples = [([S 2 2, S 2 0], "Case #1: 2 2\nCase #2: 2 0\n")]
 
 data R = R
 instance GCJ.Runner R P S where
