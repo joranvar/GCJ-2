@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Solution (P(..), S(..), R(..)) where
-import Data.List (delete, nub)
+import Data.List (nub)
 import qualified Data.Set as Set
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..), limitsOf)
 import qualified Test.QuickCheck as QS
@@ -51,10 +51,11 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
-  solve R (P ss qs) = S $ result 0 (Set.elems ss) qs
+  solve R (P ss qs) = S $ result 0 ss qs
     where result acc _ [] = acc
-          result acc [] qs' = result (acc + 1) (Set.elems ss) qs'
-          result acc ss' (Query q:qs') = result acc (delete (SearchEngine q) ss') qs'
+          result acc ss' (Query q:qs') | ss' == Set.singleton (SearchEngine q) =
+                                         result (acc + 1) (ss Set.\\ ss') qs'
+          result acc ss' (Query q:qs') = result acc (Set.delete (SearchEngine q) ss') qs'
 
   props R =
     [ ( "Length"
@@ -64,4 +65,13 @@ instance GCJ.Runner R P S where
         let ss' = map (\(SearchEngine s) -> s) (Set.elems ss)
             qs' = map (\(Query q) -> q) qs
         in i < length (filter (`elem` ss') qs') || i == 0 )
+    ]
+
+  tests R =
+    [ ( "One query, no switch"
+      , P (Set.fromList $ map SearchEngine ["A", "B"]) ([Query "A"])
+      , \(S s) -> s == 0 )
+    , ( "Two queries, one switch"
+      , P (Set.fromList $ map SearchEngine ["A", "B"]) (map Query ["A", "B"])
+      , \(S s) -> s == 1 )
     ]
