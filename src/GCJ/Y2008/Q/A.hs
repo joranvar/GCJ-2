@@ -74,4 +74,10 @@ instance GCJ.Runner R P S where
     , ( "Two queries, one switch"
       , P (Set.fromList $ map SearchEngine ["A", "B"]) (map Query ["A", "B"])
       , \(S s) -> s == 1 )
+    , ( "Three queries, one switch"
+      , P (Set.fromList $ map SearchEngine ["A", "B"]) (map Query ["A", "A", "B"])
+      , \(S s) -> s == 1 )
+    , ( "Three queries, two switches"
+      , P (Set.fromList $ map SearchEngine ["A", "B"]) (map Query ["A", "A", "B", "A"])
+      , \(S s) -> s == 2 )
     ]
