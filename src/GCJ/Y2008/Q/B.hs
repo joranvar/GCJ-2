@@ -26,11 +26,27 @@ instance GCJ.Problem P where
           na:nb:_ = map read $ words nanb
           (ab', bapart) = splitAt na abpart
           (ba', rest) = splitAt nb bapart
-          ab = []
-          ba = []
+          ab = map parseTimes ab'
+          ba = map parseTimes ba'
+          parseTimes s =
+            let hh:mm:hh':mm':_ = map read . words . map (\c -> case c of
+                                                             ':' -> ' '
+                                                             other -> other) $ s
+            in TripInformation (Time hh mm) (Time hh' mm')
 
-  parseExamples = [ ( ""
-                    , [] ) ]
+  parseExamples = [ ( "2\n5\n3 2\n09:00 12:00\n10:00 13:00\n11:00 12:30\n12:02 15:00\n09:00 10:30\n2\n2 0\n09:00 09:01\n12:00 12:02\n"
+                    , [ P 5 [ TripInformation (Time 9 0) (Time 12 0)
+                            , TripInformation (Time 10 0) (Time 13 0)
+                            , TripInformation (Time 11 0) (Time 12 30)
+                            ]
+                        [ TripInformation (Time 12 2) (Time 15 0)
+                        , TripInformation (Time 9 0) (Time 10 30)
+                        ]
+                      , P 2 [ TripInformation (Time 9 0) (Time 9 1)
+                            , TripInformation (Time 12 0) (Time 12 2)
+                            ]
+                        [ ]
+                      ] ) ]
 
   setGenerators = [ TestSet { name = "Small"
                             , generator = generate (0, 20) (0, 5)
