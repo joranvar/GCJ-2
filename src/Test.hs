@@ -6,8 +6,8 @@ import Solution (P(..), S(..), R(..))
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..))
 import System.Exit (exitFailure)
 
-tests :: R -> Test
-tests r =
+unittests :: R -> Test
+unittests r =
   let parseExamples'   = parseExamples :: [(String,[P])]
       displayExamples' = displayExamples :: [([S],String)]
   in TestList [ "Can parse"   ~: map (parse . tail . lines . fst) parseExamples' ~?= map snd parseExamples'
@@ -33,7 +33,7 @@ checks r =
 
 main :: IO ()
 main = do
-  testResults <- runTestTT $ tests R
+  testResults <- runTestTT $ unittests R
   checkResults <- mapM quickCheckResult $ checks R
   unless ( errors testResults == 0 &&
            all isSuccess checkResults ) exitFailure
