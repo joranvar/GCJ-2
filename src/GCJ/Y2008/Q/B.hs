@@ -78,3 +78,9 @@ instance GCJ.Solution S where
 data R = R
 instance GCJ.Runner R P S where
   solve R (P t as bs) = S 0 0
+
+  props R =
+    [ ( "At least"
+      , \(P _ as bs) (S a b) -> a >= length as - length bs && b >= length bs - length as
+      )
+    ]
