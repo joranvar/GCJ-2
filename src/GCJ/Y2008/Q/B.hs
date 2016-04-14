@@ -10,6 +10,9 @@ data Time = Time { hh::Int, mm::Int }
 timeOfMins :: Int -> Time
 timeOfMins mins = Time (mins `div` 60) (mins `mod` 60)
 
+minsOfTime :: Time -> Int
+minsOfTime time = hh time * 60 + mm time
+
 data TripInformation = TripInformation { depart::Time
                                        , arrive::Time }
                      deriving (Eq, Show)
