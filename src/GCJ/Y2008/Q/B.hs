@@ -3,6 +3,7 @@
 module Solution (P(..), S(..), R(..)) where
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..), limitsOf, limits)
 import qualified Test.QuickCheck as QS
+import Data.List (sortOn)
 import Data.Ord (comparing)
 
 data Time = Time { hh::Int, mm::Int }
@@ -83,7 +84,7 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
-  solve R (P t as bs) = S (solve' as bs) (solve' bs as)
+  solve R (P t as bs) = S (solve' as (sortOn arrive bs)) (solve' bs (sortOn arrive as))
     where solve' [] _ = 0
           solve' (x:xs) (y:ys) | (minsOfTime $ depart x) >= (t + (minsOfTime $ arrive y)) = solve' xs ys
           solve' (_:xs) ys = 1 + solve' xs ys
