@@ -80,7 +80,10 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
-  solve R (P t as bs) = S 0 0
+  solve R (P t as bs) = S (solve' as bs) (solve' bs as)
+    where solve' [] _ = 0
+          solve' (x:xs) (y:ys) | (minsOfTime $ depart x) >= (t + (minsOfTime $ arrive y)) = solve' xs ys
+          solve' (_:xs) ys = 1 + solve' xs ys
 
   props R =
     [ ( "At least"
