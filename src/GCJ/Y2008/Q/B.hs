@@ -3,9 +3,12 @@
 module Solution (P(..), S(..), R(..)) where
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..), limitsOf, limits)
 import qualified Test.QuickCheck as QS
+import Data.Ord (comparing)
 
 data Time = Time { hh::Int, mm::Int }
           deriving (Eq, Show)
+instance Ord Time where
+  compare = comparing minsOfTime
 
 timeOfMins :: Int -> Time
 timeOfMins mins = Time (mins `div` 60) (mins `mod` 60)
