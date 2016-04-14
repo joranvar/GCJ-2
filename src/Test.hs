@@ -15,7 +15,7 @@ unittests r =
        , "Can display" ~: map (unlines . zipWith display [1..] . fst) displayExamples' ~?= map snd displayExamples'
        , "Can solve"   ~: map (interactor r . fst) parseExamples' ~?= map snd displayExamples'
        ]
-     ++ (map (\(label, p, test) -> label ~: True ~=? test (solve r p)) $ tests r)
+     ++ (map (\(testName, p, test) -> testName ~: True ~=? test (solve r p)) $ tests r)
 
 checks :: R -> [Property]
 checks r =
