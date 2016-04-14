@@ -68,9 +68,9 @@ instance GCJ.Problem P where
                             , map ("nb:" ++) bLabel
                             , map ("t:" ++) tLabel ])
           generateTripInformation = do
-            depart <- QS.choose (0, (24 * 60) - 2)
-            tripTime <- QS.choose (1, (24 * 60) - depart)
-            return $ TripInformation (timeOfMins depart) (timeOfMins $ depart + tripTime)
+            departTime <- QS.choose (0, (24 * 60) - 2)
+            tripTime <- QS.choose (1, (24 * 60) - departTime)
+            return $ TripInformation (timeOfMins departTime) (timeOfMins $ departTime + tripTime)
 
 data S = S Int Int
   deriving (Eq, Show)
