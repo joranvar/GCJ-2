@@ -5,6 +5,7 @@ module GCJ where
 
 import Test.QuickCheck (Gen)
 import qualified Test.QuickCheck as QS
+import System.Random (Random)
 
 data TestSet p = TestSet { name::String, generator::Gen p, testRuntime::Int, numCases::Int }
 
@@ -26,7 +27,7 @@ class (Problem p, Solution s) => Runner r p s | r -> p s where
   props _ = []
   tests _ = []
 
-limits :: Int -> Int -> Gen (Int, [String])
+limits :: (Random a, Eq a) => a -> a -> Gen (a, [String])
 limits min' max' = do
   n  <- QS.oneof [QS.choose (min', max'), QS.elements [min', max']]
   return ( n, case n of _ | n == min' -> ["min"]
