@@ -42,7 +42,8 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
-  solve R (P ss) = S ""
+  solve R (P ss) = S $ maxS:""
+    where maxS = maximum ss
 
   props R =
     [ ( "Length"
