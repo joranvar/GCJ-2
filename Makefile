@@ -20,10 +20,11 @@ HUnit = $(call HASKELL_mkCabalDep,HUnit)
 QuickCheck = $(call HASKELL_mkCabalDep,QuickCheck)
 Digits = $(call HASKELL_mkCabalDep,digits)
 Parallel = $(call HASKELL_mkCabalDep,parallel)
+Split = $(call HASKELL_mkCabalDep,split)
 
 # Groups
 GCJ = GCJ.hs
-Solution = GCJ/Y2008/Q/B.hs $(GCJ) $(Digits) $(Parallel)
+Solution = GCJ/Y2016/1A/A.hs $(GCJ) $(Digits) $(Parallel) $(Split)
 
 # Dependencies
 $(Main): Main.hs $(Solution)
