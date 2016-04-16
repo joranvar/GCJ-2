@@ -23,11 +23,11 @@ instance GCJ.Problem P where
 
   setGenerators = [ TestSet { name = "Small"
                             , generator = generate 10
-                            , testRuntime = 4 * 60 * 1000
+                            , testRuntime = 4 * 60 * 1000 * 1000
                             , numCases = 50 }
                   , TestSet { name = "Large"
                             , generator = generate 50
-                            , testRuntime = 8 * 60 * 1000
+                            , testRuntime = 8 * 60 * 1000 * 1000
                             , numCases = 50 } ]
     where generate maxN =  do
             (n, nLabel) <- GCJ.limits 2 maxN
