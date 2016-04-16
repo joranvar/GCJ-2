@@ -6,7 +6,7 @@ import qualified Test.QuickCheck as QS
 import Data.Bits (bit, shift)
 import Data.Digits (digits, unDigits)
 import Data.List (unfoldr, find, sortOn)
-import Data.List (group, nub)
+import Data.List (group, nub, sort)
 import Data.Maybe (catMaybes, isNothing, fromJust)
 import Control.Arrow (second)
 
@@ -44,7 +44,7 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
-  solve R (P ns) = S []
+  solve R (P ns) = S $ map head . filter ((/= 0) . (`mod` 2) . length). group . sort $ concat ns
 
   props R =
     [ ( "Some prop"
