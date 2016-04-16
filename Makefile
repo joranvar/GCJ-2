@@ -24,7 +24,7 @@ Split = $(call HASKELL_mkCabalDep,split)
 
 # Groups
 GCJ = GCJ.hs
-Solution = GCJ/Y2016/1A/A.hs $(GCJ) $(Digits) $(Parallel) $(Split)
+Solution = GCJ/Y2016/1A/B.hs $(GCJ) $(Digits) $(Parallel) $(Split)
 
 # Dependencies
 $(Main): Main.hs $(Solution)
