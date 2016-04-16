@@ -45,6 +45,6 @@ instance GCJ.Runner R P S where
   solve R (P ss) = S ""
 
   props R =
-    [ ( "Some prop"
-      , \p s -> True )
+    [ ( "Length"
+      , \(P s) (S ss) -> length s == length ss )
     ]
