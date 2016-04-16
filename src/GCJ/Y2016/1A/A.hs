@@ -6,7 +6,7 @@ import qualified Test.QuickCheck as QS
 import Data.Bits (bit, shift)
 import Data.Digits (digits, unDigits)
 import Data.List (unfoldr, find, sortOn)
-import Data.List (group)
+import Data.List (group, break)
 import Data.Maybe (catMaybes, isNothing, fromJust)
 import Control.Arrow (second)
 
@@ -42,8 +42,13 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
-  solve R (P ss) = S $ maxS:""
-    where maxS = maximum ss
+  solve R (P ss) = S $ solve' ss
+    where
+      solve' [] = []
+      solve' ss' = maxS:(solve' lessS)++moreS
+        where
+          maxS = maximum ss'
+          (lessS, _:moreS) = break (== maxS) ss'
 
   props R =
     [ ( "Length"
