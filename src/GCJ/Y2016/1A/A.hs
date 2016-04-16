@@ -22,11 +22,11 @@ instance GCJ.Problem P where
 
   setGenerators = [ TestSet { name = "Small"
                             , generator = generate 15
-                            , testRuntime = 4 * 60 * 1000
+                            , testRuntime = 4 * 60 * 1000 * 1000
                             , numCases = 100 }
                   , TestSet { name = "Large"
                             , generator = generate 1000
-                            , testRuntime = 8 * 60 * 1000
+                            , testRuntime = 8 * 60 * 1000 * 1000
                             , numCases = 100 } ]
     where generate maxLen =  do
             (n, nLabel) <- GCJ.limitsOf 1 maxLen $ QS.elements ['A'..'Z']
