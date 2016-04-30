@@ -3,13 +3,8 @@
 module Solution (P(..), S(..), R(..)) where
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..), limitsOf)
 import qualified Test.QuickCheck as QS
-import Data.Bits (bit, shift)
-import Data.Digits (digits, unDigits)
-import Data.List (unfoldr, find, sortOn)
-import Data.List (group, break, inits, tails, intersperse, sort)
-import Data.List.Split (splitOn)
-import Data.Maybe (catMaybes, isNothing, fromJust)
-import Control.Arrow (first, second)
+import Data.List (group, sort)
+import Control.Arrow (second)
 
 data P = P String
   deriving (Eq, Show)
@@ -43,9 +38,17 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
-  solve R (P ss) = S $ map length groups
-    where groups = group . sort $ ss
-          zs = length $ filter (=='Z') ss
+  solve R (P ss) = S $ zeros ++ ones ++ twos ++ threes ++ fours ++ fives ++ sixes ++ sevens ++ eights ++ nines
+    where zeros = map (const 0) $ filter (=='Z') ss
+          twos = map (const 2) $ filter (=='W') ss
+          fours = map (const 4) $ filter (=='U') ss
+          sixes = map (const 6) $ filter (=='X') ss
+          fives = flip replicate 5 $ (length $ filter (=='F') ss) - length fours
+          sevens = flip replicate 7 $ (length $ filter (=='V') ss) - length fives
+          eights = map (const 8) $ filter (=='G') ss
+          ones = flip replicate 1 $ (length $ filter (=='O') ss) - length (fours++twos++zeros)
+          threes = flip replicate 3 $ (length $ filter (=='H') ss) - length eights
+          nines = flip replicate 9 $ (length $ filter (=='I') ss) - length (fives++sixes++eights)
 
   props R =
     [ ( "True"
