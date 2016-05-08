@@ -19,18 +19,18 @@ instance GCJ.Problem P where
                     , [ P 1 1 1 10, P 1 2 3 2, P 1 1 3 2, P 1 2 3 1 ] ) ]
 
   setGenerators = [ TestSet { name = "Small"
-                            , generator = generate 20
+                            , generator = generate 3
                             , testRuntime = 4 * 60 * 1000 * 1000
                             , numCases = 100 }
                   , TestSet { name = "Large"
-                            , generator = generate 2000
+                            , generator = generate 10
                             , testRuntime = 8 * 60 * 1000 * 1000
                             , numCases = 100 } ]
     where generate maxLen =  do
-            (j, jLabel) <- GCJ.limits 3 maxLen
-            (p, pLabel) <- GCJ.limits 3 maxLen
-            (s, sLabel) <- GCJ.limits 3 maxLen
-            (k, kLabel) <- GCJ.limits 3 maxLen
+            (j, jLabel) <- GCJ.limits 1 maxLen
+            (p, pLabel) <- GCJ.limits j maxLen
+            (s, sLabel) <- GCJ.limits p maxLen
+            (k, kLabel) <- GCJ.limits 1 10
             return ( P j p s k
                    , map (uncurry (++) . second show) [("j:", jLabel),("p:", pLabel),("s:", sLabel),("k:", kLabel)])
 
