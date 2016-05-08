@@ -4,6 +4,7 @@ module Solution (P(..), S(..), R(..)) where
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..), limits)
 import qualified Test.QuickCheck as QS
 import Control.Arrow (second)
+import Data.List (groupBy)
 
 data P = P Int Int Int Int
   deriving (Eq, Show)
@@ -43,7 +44,16 @@ instance GCJ.Solution S where
 
 data R = R
 instance GCJ.Runner R P S where
-  solve R (P j p s k) = S []
+  solve R (P j p s k) =
+    let js = [1..j]
+        ps = [1..p]
+        ss = [1..s]
+        outfits = [(j,p,s) | j <- js, p <- ps, s <- ss]
+        jpsets = length . groupBy (\(j0,p0,s0) (j1,p1,s1) -> j0==j1 && p0==p1) :: [(Int,Int,Int)] -> Int
+        jssets = length . groupBy (\(j0,p0,s0) (j1,p1,s1) -> j0==j1 && s0==s1) :: [(Int,Int,Int)] -> Int
+        pssets = length . groupBy (\(j0,p0,s0) (j1,p1,s1) -> p0==p1 && s0==s1) :: [(Int,Int,Int)] -> Int
+        maybeAddOutfit fits fit = if maximum (map ($ fit:fits) [jpsets, jssets, pssets]) <= k then fit:fits else fits
+    in S $ foldl maybeAddOutfit [] outfits
 
   props R =
     [ ( "True"
