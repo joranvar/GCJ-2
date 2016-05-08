@@ -50,14 +50,15 @@ instance GCJ.Runner R P S where
         ps = [1..p]
         ss = [1..s]
         outfits = [(j,p,s) | j <- js, p <- ps, s <- ss]
-        jpsets = maximum . map length . group . sort . map (\(j0,p0,s0) -> (j0, p0)) :: [(Int,Int,Int)] -> Int
-        jssets = maximum . map length . group . sort . map (\(j0,p0,s0) -> (j0, s0)) :: [(Int,Int,Int)] -> Int
-        pssets = maximum . map length . group . sort . map (\(j0,p0,s0) -> (p0, s0)) :: [(Int,Int,Int)] -> Int
-        maybeAddOutfit fits fit = if maximum (map ($ fit:fits) [jpsets, jssets, pssets]) <= k then fit:fits else fits
-        allowedOutfits = foldl maybeAddOutfit []
-    in S $ maximumBy (comparing length) $ map allowedOutfits $ permutations outfits
+    in S $ maximumBy (comparing length) $ map (allowedOutfits k) $ permutations outfits
 
   props R =
     [ ( "True"
-      , \(P j p s k) (S xs) -> True )
+      , \(P j p s k) (S xs) -> allowedOutfits k xs == xs )
     ]
+
+allowedOutfits k = foldl (maybeAddOutfit k) []
+jpsets = maximum . map length . group . sort . map (\(j0,p0,s0) -> (j0, p0)) :: [(Int,Int,Int)] -> Int
+jssets = maximum . map length . group . sort . map (\(j0,p0,s0) -> (j0, s0)) :: [(Int,Int,Int)] -> Int
+pssets = maximum . map length . group . sort . map (\(j0,p0,s0) -> (p0, s0)) :: [(Int,Int,Int)] -> Int
+maybeAddOutfit k fits fit = if maximum (map ($ fit:fits) [jpsets, jssets, pssets]) <= k then fit:fits else fits
