@@ -50,7 +50,7 @@ instance GCJ.Runner R P S where
         ps = [1..p]
         ss = [1..s]
         outfits = [(j,p,s) | j <- js, p <- ps, s <- ss]
-    in S $ maximumBy (comparing length) $ map (allowedOutfits k) $ permutations outfits
+    in S $ (allowedOutfits k) $ outfits
 
   props R =
     [ ( "True"
