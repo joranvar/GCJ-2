@@ -46,11 +46,13 @@ instance GCJ.Solution S where
 data R = R
 instance GCJ.Runner R P S where
   solve R (P j p s k) =
-    let js = [1..j]
-        ps = [1..p]
-        ss = [1..s]
-        outfits = [(j,p,s) | j <- js, p <- ps, s <- ss]
-    in S $ (allowedOutfits k) $ outfits
+    if s <= k
+    then S outfits
+    else S $ head $ filter ((== j * p * k) . length) $ map (allowedOutfits k) $ permutations outfits
+    where js = [1..j]
+          ps = [1..p]
+          ss = [1..s]
+          outfits = [(j,p,s) | j <- js, p <- ps, s <- ss]
 
   props R =
     [ ( "True"
