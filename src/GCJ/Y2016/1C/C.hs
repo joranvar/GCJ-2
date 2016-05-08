@@ -32,18 +32,20 @@ instance GCJ.Problem P where
             return ( P j p s k
                    , map (uncurry (++) . second show) [("j:", jLabel),("p:", pLabel),("s:", sLabel),("k:", kLabel)])
 
-data S = S
+data S = S [(Int,Int,Int)]
   deriving (Eq, Show)
 instance GCJ.Solution S where
-  display n S = "Case #" ++ show n ++ ": "
-  displayExamples = [( [S]
-                     , "Case #1: \n" )]
+  display n (S outfits) = "Case #" ++ show n ++ ": " ++ (show $ length outfits) ++ "\n" ++ (init . unlines $ map display' outfits)
+    where
+      display' (j, s, k) = tail $ concatMap ((" " ++) . show) [j,s,k]
+  displayExamples = [( [S [(1,1,1)], S [(1,1,2), (1,2,3), (1,2,1), (1,1,1)], S [(1,1,2), (1,1,1)], S [(1,1,3), (1,2,1)]]
+                     , "Case #1: 1\n1 1 1\nCase #2: 4\n1 1 2\n1 2 3\n1 2 1\n1 1 1\nCase #3: 2\n1 1 2\n1 1 1\nCase #4: 2\n1 1 3\n1 2 1\n" )]
 
 data R = R
 instance GCJ.Runner R P S where
-  solve R (P j p s k) = S
+  solve R (P j p s k) = S []
 
   props R =
     [ ( "True"
-      , \(P j p s k) S -> True )
+      , \(P j p s k) (S xs) -> True )
     ]
