@@ -54,7 +54,7 @@ instance GCJ.Runner R P S where
 
   props R =
     [ ( "True"
-      , \(P j p s k) (S xs) -> allowedOutfits k xs == xs )
+      , \(P j p s k) (S xs) -> length (allowedOutfits k xs) == length xs )
     ]
 
 allowedOutfits k = foldl (maybeAddOutfit k) []
