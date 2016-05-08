@@ -49,9 +49,9 @@ instance GCJ.Runner R P S where
         ps = [1..p]
         ss = [1..s]
         outfits = [(j,p,s) | j <- js, p <- ps, s <- ss]
-        jpsets = length . groupBy (\(j0,p0,s0) (j1,p1,s1) -> j0==j1 && p0==p1) :: [(Int,Int,Int)] -> Int
-        jssets = length . groupBy (\(j0,p0,s0) (j1,p1,s1) -> j0==j1 && s0==s1) :: [(Int,Int,Int)] -> Int
-        pssets = length . groupBy (\(j0,p0,s0) (j1,p1,s1) -> p0==p1 && s0==s1) :: [(Int,Int,Int)] -> Int
+        jpsets = maximum . map length . groupBy (\(j0,p0,s0) (j1,p1,s1) -> j0==j1 && p0==p1) :: [(Int,Int,Int)] -> Int
+        jssets = maximum . map length . groupBy (\(j0,p0,s0) (j1,p1,s1) -> j0==j1 && s0==s1) :: [(Int,Int,Int)] -> Int
+        pssets = maximum . map length . groupBy (\(j0,p0,s0) (j1,p1,s1) -> p0==p1 && s0==s1) :: [(Int,Int,Int)] -> Int
         maybeAddOutfit fits fit = if maximum (map ($ fit:fits) [jpsets, jssets, pssets]) <= k then fit:fits else fits
     in S $ foldl maybeAddOutfit [] outfits
 
