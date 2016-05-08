@@ -4,7 +4,8 @@ module Solution (P(..), S(..), R(..)) where
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..), limits)
 import qualified Test.QuickCheck as QS
 import Control.Arrow (second)
-import Data.List (groupBy)
+import Data.List (groupBy, maximumBy, permutations)
+import Data.Ord (comparing)
 
 data P = P Int Int Int Int
   deriving (Eq, Show)
@@ -53,7 +54,8 @@ instance GCJ.Runner R P S where
         jssets = maximum . map length . groupBy (\(j0,p0,s0) (j1,p1,s1) -> j0==j1 && s0==s1) :: [(Int,Int,Int)] -> Int
         pssets = maximum . map length . groupBy (\(j0,p0,s0) (j1,p1,s1) -> p0==p1 && s0==s1) :: [(Int,Int,Int)] -> Int
         maybeAddOutfit fits fit = if maximum (map ($ fit:fits) [jpsets, jssets, pssets]) <= k then fit:fits else fits
-    in S $ foldl maybeAddOutfit [] outfits
+        allowedOutfits = foldl maybeAddOutfit []
+    in S $ maximumBy (comparing length) $ map allowedOutfits $ permutations outfits
 
   props R =
     [ ( "True"
