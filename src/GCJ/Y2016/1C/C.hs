@@ -4,7 +4,7 @@ module Solution (P(..), S(..), R(..)) where
 import GCJ (Problem(..), Solution(..), Runner(..), TestSet(..), limits)
 import qualified Test.QuickCheck as QS
 import Control.Arrow (second)
-import Data.List (groupBy, maximumBy, permutations)
+import Data.List (maximumBy, permutations, group, sort)
 import Data.Ord (comparing)
 
 data P = P Int Int Int Int
@@ -50,9 +50,9 @@ instance GCJ.Runner R P S where
         ps = [1..p]
         ss = [1..s]
         outfits = [(j,p,s) | j <- js, p <- ps, s <- ss]
-        jpsets = maximum . map length . groupBy (\(j0,p0,s0) (j1,p1,s1) -> j0==j1 && p0==p1) :: [(Int,Int,Int)] -> Int
-        jssets = maximum . map length . groupBy (\(j0,p0,s0) (j1,p1,s1) -> j0==j1 && s0==s1) :: [(Int,Int,Int)] -> Int
-        pssets = maximum . map length . groupBy (\(j0,p0,s0) (j1,p1,s1) -> p0==p1 && s0==s1) :: [(Int,Int,Int)] -> Int
+        jpsets = maximum . map length . group . sort . map (\(j0,p0,s0) -> (j0, p0)) :: [(Int,Int,Int)] -> Int
+        jssets = maximum . map length . group . sort . map (\(j0,p0,s0) -> (j0, s0)) :: [(Int,Int,Int)] -> Int
+        pssets = maximum . map length . group . sort . map (\(j0,p0,s0) -> (p0, s0)) :: [(Int,Int,Int)] -> Int
         maybeAddOutfit fits fit = if maximum (map ($ fit:fits) [jpsets, jssets, pssets]) <= k then fit:fits else fits
         allowedOutfits = foldl maybeAddOutfit []
     in S $ maximumBy (comparing length) $ map allowedOutfits $ permutations outfits
